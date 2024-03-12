@@ -2,7 +2,7 @@
 using namespace std;
 
 enum piece {PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, BLANK}; // TYPE OF PIECES
-enum color {BLACK, WHITE}; // COLOR OF PIECE
+enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
 
 class Pieces{
     
@@ -51,21 +51,58 @@ class gameManager{
     public:
         // constructor
         gameManager(){
-            // hard code every piece of the board, that isn't blank
-            Pieces board[8][8];
-            est obj[] = { Test(1, 1), Test(2, 2), Test(3, 3) }
-                for(int i = 0; i < 8; i++){
-                    for(int j = 0; j < 8; j++){
-                       // board[i][j].setRow(i);
-                        //board[i][j].setColumn(j);
-                        //board[i][j].setPiece(BLANK);
-                        //cout << board[i][j].getPiece() ;
-                    }
-                    cout << endl;
-                }
+            
+        }
 
+        bool isItWhitesTurn(){
+            return whitesTurn;
+        }
+
+        void changeTurn(){
+            whitesTurn = !whitesTurn;
         }
         
-    private:
+        void printBoard(){
+            
+        }
 
+        bool isCheckmate(){
+            
+            return false;
+        }
+
+        bool isStalemate(){
+            
+            return false;
+        }
+
+        // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
+        void attemptMove(string move){
+            //more methods in here? one for each piece?
+        }
+
+        // these two are mostly for testing
+        void incMoveCount(){
+            moveCount++;
+        }
+        int getMoveCount(){
+            return moveCount;
+        }
+
+    private:
+        bool whitesTurn = true;
+        int moveCount = 0;
+        // todo
+        // order goes: color, piece number, piece type, row, column
+        // make sure to do the blank pieces (BLANK for piece type, NONE for color)
+        Pieces board[8][8] = { 
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                };
 };

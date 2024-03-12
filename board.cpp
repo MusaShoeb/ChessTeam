@@ -4,10 +4,13 @@ using namespace std;
 
 int main() {
 	
-	//Pieces wah;
 	gameManager game;
 
-	cout <<"worked";
+	while(!game.isCheckmate() and !game.isStalemate() and game.getMoveCount() < 50){
+
+		game.incMoveCount();
+	}
+
 	return 0;
 };
 
