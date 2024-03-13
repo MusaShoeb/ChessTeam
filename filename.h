@@ -63,7 +63,11 @@ class gameManager{
         }
         
         void printBoard(){
-            
+         for(int i = 0; i < 8; i ++){
+             for(int j = 0; j < 8; j++){
+                 cout << board[i][j];
+             }
+             cout << endl;
         }
 
         bool isCheckmate(){
@@ -105,4 +109,5 @@ class gameManager{
                 Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
                 Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
                 };
+ 
 };
