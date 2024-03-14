@@ -100,14 +100,14 @@ class gameManager{
         // order goes: color, piece number, piece type, row, column
         // make sure to do the blank pieces (BLANK for piece type, NONE for color)
         Pieces board[8][8] = { 
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
-                Pieces(WHITE, 1, ROOK, 1, 1), Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),Pieces(WHITE, 1, ROOK, 1, 1),
+                Pieces(BLACK, 1, ROOK, 0, 1), Pieces(BLACK, 0, KNIGHT, 0, 1),Pieces(BLACK, 0, BISHOP, 0, 1),Pieces(BLACK, 0, QUEEN, 0, 1),Pieces(BLACK, 0, KING, 0, 1),Pieces(BLACK, 0, BISHOP, 0, 1),Pieces(BLACK, 0, KNIGHT, 0, 1),Pieces(BLACK, 2, ROOK, 0, 0),
+                Pieces(BLACK, 0, PAWN, 0, 2), Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 2),Pieces(BLACK, 0, PAWN, 0, 0),
+                Pieces(NONE, 0, BLANK, 0, 3), Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 3),Pieces(NONE, 0, BLANK, 0, 0),
+                Pieces(NONE, 0, BLANK, 0, 4), Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 4),Pieces(NONE, 0, BLANK, 0, 0),
+                Pieces(NONE, 0, BLANK, 0, 5), Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 5),Pieces(NONE, 0, BLANK, 0, 0),
+                Pieces(NONE, 0, BLANK, 0, 6), Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 6),Pieces(NONE, 0, BLANK, 0, 0),
+                Pieces(WHITE, 0, PAWN, 0, 7), Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 7),Pieces(WHITE, 0, PAWN, 0, 0),
+                Pieces(WHITE, 0, ROOK, 0, 8), Pieces(WHITE, 0, KNIGHT, 0, 8),Pieces(WHITE, 0, BISHOP, 0, 8),Pieces(WHITE, 0, QUEEN, 0, 8),Pieces(WHITE, 0, KING, 0, 8),Pieces(WHITE, 0, BISHOP, 0, 8),Pieces(WHITE, 0, KNIGHT, 0, 0),Pieces(WHITE, 0, ROOK, 0, 0),
                 };
  
 };
