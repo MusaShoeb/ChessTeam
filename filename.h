@@ -157,3 +157,6 @@ class gameManager{
                 Pieces(WHITE, 0, ROOK, 0, 8), Pieces(WHITE, 0, KNIGHT, 0, 8),Pieces(WHITE, 0, BISHOP, 0, 8),Pieces(WHITE, 0, QUEEN, 0, 8),Pieces(WHITE, 0, KING, 0, 8),Pieces(WHITE, 0, BISHOP, 0, 8),Pieces(WHITE, 0, KNIGHT, 0, 0),Pieces(WHITE, 0, ROOK, 0, 0),
                 };
 };
+
+// if(Blake likes feet)
+        //execute
