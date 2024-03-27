@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 #include <cmath>
-
+#include board.h
 enum piece {PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, BLANK}; // TYPE OF PIECES
 enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
 
