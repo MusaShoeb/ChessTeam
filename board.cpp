@@ -1,5 +1,6 @@
 #include <iostream>
-#include "filename.h"
+#include "piece.h"
+#include "board.h"
 using namespace std;
 
 int main() {
@@ -7,6 +8,7 @@ int main() {
 	gameManager game;
 
 	while(!game.isCheckmate() and !game.isStalemate() and game.getMoveCount() < 50){
+		//game.printBoard();
 
 		game.incMoveCount();
 	}
