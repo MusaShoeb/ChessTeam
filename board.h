@@ -35,6 +35,8 @@ public:
 
 
                 //below can be used of check of piece 
+                    // if peicetype called at coordinates x,y 
+                    // to be continued - push coming tonight 
                 
                 char symbol = ' '; // Default for empty space
 
@@ -72,7 +74,7 @@ public:
 
         return false;
     }
-    bool check_available(Pieces, currentPiece, int x_spaces, int y_spaces) {
+    bool check_available(Piece, currentPiece, int x_spaces, int y_spaces) {
         if (currentPiece.getPiece() == ROOK)
             for (int i = 0; i < x_spaces) {
                 if (direction) {
