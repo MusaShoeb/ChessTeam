@@ -65,10 +65,24 @@ public:
     }
 
         /// <summary>
-        /// ///////////dany edit above
+        /// ///////////dany edit above naming peices others for alternative, below movement of peice from a certian positon - who ever doing movement let me see what u got planned please :
         /// </summary>
 
-    
+        void coordbypeicenum(int piece_number) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j].getNumber() == piece_number) {
+
+                    piece piecetype = board[i][j].getPiece(); 
+                    // Assuming getPiece is just to access the piece and not necessary for finding coordinates //coordinates are already stated in board and is falls in with each peice
+                    cout << "Coordinates for piece number " << piece_number << ": " << i << ", " << j << endl;
+                    cout << "Piece that has been chosen for movement: " << piecetype << endl; 
+                    return; // Exit the function after finding and printing the piece
+                }
+            }
+        }
+        cout << "Piece number " << piece_number << " not found." << endl;
+    }
 
     bool isCheckmate() {
 
