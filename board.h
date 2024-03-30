@@ -52,6 +52,13 @@ class gameManager{
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
         void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
             //more methods in here? one for each piece?
+            if(check_available(board[columnPieceThatsMoving][rowPieceThatsMoving], columnPieceThatsMoving - columnItGoesTo, rowPieceThatsMoving - rowItGoesTo)){
+                Pieces tempBlank = Pieces(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
+                board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
+                board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
+                changeTurn();
+            }
+             
         }
 
         // these two are mostly for testing
