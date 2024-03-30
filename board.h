@@ -31,6 +31,11 @@ public:
             for (int j = 0; j < 8; j++) {
                 piece piecetype = board[i][j].getPiece();  // adding coordinates later today 
                 color colortype = board[i][j].getColor();
+                cout << board[i][j].getPiece(); << "\n"
+
+
+                //below can be used of check of piece 
+                
                 char symbol = ' '; // Default for empty space
 
                 switch (piecetype) {
@@ -87,6 +92,8 @@ public:
     // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
     void attemptMove(string move) {
         //more methods in here? one for each piece?
+
+        
     }
 
     // these two are mostly for testing
