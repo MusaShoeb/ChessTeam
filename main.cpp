@@ -46,7 +46,8 @@ int main() {
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
 
-			cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;
+			//uncommented below to see what the gets passed to the attemptMoveFunction
+			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;
 		}
 		//black's turn
 		else{
@@ -77,8 +78,9 @@ int main() {
 				cin >> rowOfPieceToGoTo;
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
-
-			cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;	
+			
+			//uncommented below to see what the gets passed to the attemptMoveFunction
+			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;	
 		}
 
 		//game.attemptMove(intColumnOfPieceToMove,rowOfPieceToMove,intColumnOfPieceToGoTo,rowOfPieceToGoTo)
