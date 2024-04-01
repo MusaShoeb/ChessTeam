@@ -1,7 +1,7 @@
 #include <iostream>
-using namespace std;
 #include <cmath>
-#include "board.h"
+using namespace std;
+
 
 enum piece {PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, BLANK}; // TYPE OF PIECES
 enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
@@ -39,41 +39,6 @@ class Pieces{
         }
         void setPiece(piece desired_Piece){
             pieceType = desired_Piece;
-        }
-        void moveRook(piece rookToMove, int numOfSpaces, bool direction){
-            if(direction){
-              rookToMove.current_column += y_spaces;  
-            }
-            else{
-                rookToMove.current_row  += x_spaces;
-            }
-        }
-        void moveBishop(&Piece bishopToMove, int x_spaces, int y_spaces, bool direction){
-            if(abs(x_spaces) == abs(y_spaces)){
-                bishopToMove.current_column += y_spaces;
-                bishopToMove.current_row += x_spaces;
-            }
-        }
-        void movePawn(&Piece pawnToMove, int x_spaces, int y_spaces, bool direction){
-            if((pawnToMove.getColor() == WHITE) && (pawnToMove.getRow() == 2)){
-                if(int x_spaces <= 2){
-                    pawnToMove.current_column += x_spaces;
-                }
-            }
-            if((pawnToMove.getColor() == BLACK) && (pawnToMove.getRow() == 7)){
-                if(int x_spaces >= -2){
-                    pawnToMove.current_column += x_spaces;
-                }
-            }
-            /*if(check_If_Piece_at_location){
-                if(pawnToMove.getColor() == WHITE)){
-                    if(x_spaces == 1 && (y_spaces == 1 || y_spaces == -1)){
-                        pawnToMove += x_spaces;
-                        pawnToMove += y_spaces;
-                    }
-                    
-                }
-            }*/
         }
     private:
         piece pieceType;

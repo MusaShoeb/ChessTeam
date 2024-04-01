@@ -1,11 +1,11 @@
 #include <iostream>
-//#include "piece.h"
-//#include "board.h"
+#include "piece.h"
+#include "board.h"
 using namespace std;
 
 int main() {
 	
-	//gameManager game;
+	gameManager game;
 	int rowOfPieceToMove = -1;
 	char columnOfPieceToMove = ' ';
 	int intColumnOfPieceToMove;
@@ -14,7 +14,7 @@ int main() {
 	int intColumnOfPieceToGoTo = -1;
 
 	do{
-		//game.printBoard();
+		game.printBoard();
 
 		//whites turn
 		if(/* game.whitesTurn */true){
