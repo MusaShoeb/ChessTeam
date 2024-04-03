@@ -16,30 +16,52 @@ class Pieces{
             current_row = starting_ROW;
             current_column = starting_column;
         }
+        
         piece getPiece(){
             return pieceType;
         }
+        
         color getColor(){
             return colorType;
         }
+        
         int getNumber(){
             return piece_Number;
         }
+        
         int getColumn(){
             return current_column;
         }
+        
         int getRow(){
             return current_row;
         }
+        
         void setRow(int desired_Row){
             current_row = desired_Row;
         }
+        
         void setColumn(int desired_Column){
             current_column = desired_Column;
         }
+        
         void setPiece(piece desired_Piece){
             pieceType = desired_Piece;
         }
+        
+        void setColor(color desired_Color){
+            colorType = desired_Color;
+        }
+
+        /*Copy constructor*/
+        Pieces(Pieces& sample){
+            pieceType = sample.pieceType;
+            colorType = sample.colorType;
+            piece_Number = sample.piece_Number;
+            current_column = sample.current_column;
+            current_row = sample.current_column;
+        }
+    
     private:
         piece pieceType;
         color colorType;

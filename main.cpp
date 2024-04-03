@@ -15,9 +15,8 @@ int main() {
 
 	do{
 		game.printBoard();
-
-		//whites turn
-		if(/* game.whitesTurn */true){
+		//whites turn first
+		if( game.isItWhitesTurn() ){
 			do{
 				cout << "column of the piece white wants to move: ";
 				cin >> columnOfPieceToMove;
@@ -48,6 +47,16 @@ int main() {
 
 			//uncommented below to see what the gets passed to the attemptMoveFunction
 			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;
+
+			// move pieces that the user wants 
+			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+
+			// increase the counter
+			game.incMoveCount();
+
+			// change to black's turn for the next do-while loop iteration
+			game.changeTurn();
+
 		}
 		//black's turn
 		else{
@@ -79,16 +88,18 @@ int main() {
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
 			
-			//uncommented below to see what the gets passed to the attemptMoveFunction
-			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;	
+			// move pieces that the user wants 
+			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+			
+			// increase the counter
+			game.incMoveCount();
+			
+			// change to white's turn for the next do-while loop iteration
+			game.changeTurn();
 		}
 
-		//game.attemptMove(intColumnOfPieceToMove,rowOfPieceToMove,intColumnOfPieceToGoTo,rowOfPieceToGoTo)
-		//game.incMoveCount();
-	}while(/*
-		!game.isCheckmate() and !game.isStalemate() and game.getMoveCount() < 50*/
-		false
-		);
+		// this is a temp game loop 
+	}while(game.getMoveCount() != 4);
 
 	return 0;
 };

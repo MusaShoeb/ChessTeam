@@ -86,6 +86,35 @@ public:
 
     }
 
+    void movePiece(int intColumnOfPieceToMove, int rowOfPieceToMove, int intColumnOfPieceToGoTo, int rowOfPieceToGoTo){
+        
+        /*Created a temp object to deep copy after replacing the piece to go to with the piece that wanted to move*/
+        /*Not space efficient but also created a blank object in case of takes*/
+
+        // the problem with this is that the row and column data inside the piece objects are not accurate.
+
+        Pieces tempObj = board[rowOfPieceToGoTo][intColumnOfPieceToGoTo];
+        Pieces blankObj(NONE, 0, BLANK, rowOfPieceToMove, intColumnOfPieceToMove);
+
+        //if it is white turn and the piece at the desired spot to move at is black, then replace the black piece with the white piece
+        //then replace the spot the white piece was with a blank space.
+        if(board[rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
+            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
+            board[rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        }
+        //vice versa
+        else if(board[rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
+            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
+            board[rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        }
+        //if the piece just moves to a blank space 
+        else{
+            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
+            board[rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+        }
+        
+        
+    }
 
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
     void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
