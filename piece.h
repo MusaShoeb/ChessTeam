@@ -9,6 +9,7 @@ enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
 class Pieces{
     
     public:
+
         Pieces(color the_Color, int number_Of_Piece, piece type_Of_Piece , int starting_ROW , int starting_column){
             pieceType = type_Of_Piece;
             colorType = the_Color;
@@ -53,7 +54,7 @@ class Pieces{
             colorType = desired_Color;
         }
 
-        /*Copy constructor*/
+        /*Copy constructor
         Pieces(Pieces& sample){
             pieceType = sample.pieceType;
             colorType = sample.colorType;
@@ -61,6 +62,7 @@ class Pieces{
             current_column = sample.current_column;
             current_row = sample.current_column;
         }
+        */
     
     private:
         piece pieceType;

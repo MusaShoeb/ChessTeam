@@ -93,24 +93,24 @@ public:
 
         // the problem with this is that the row and column data inside the piece objects are not accurate.
 
-        Pieces tempObj = board[rowOfPieceToGoTo][intColumnOfPieceToGoTo];
-        Pieces blankObj(NONE, 0, BLANK, rowOfPieceToMove, intColumnOfPieceToMove);
+        Pieces tempObj = board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo];
+        Pieces blankObj(NONE, 0, BLANK, 7 - rowOfPieceToMove, intColumnOfPieceToMove);
 
         //if it is white turn and the piece at the desired spot to move at is black, then replace the black piece with the white piece
         //then replace the spot the white piece was with a blank space.
-        if(board[rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
-            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
-            board[rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
         }
         //vice versa
-        else if(board[rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
-            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
-            board[rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        else if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
         }
         //if the piece just moves to a blank space 
         else{
-            board[rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[rowOfPieceToMove][intColumnOfPieceToMove];
-            board[rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
         }
         
         
@@ -120,7 +120,7 @@ public:
     void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
             //more methods in here? one for each piece?
             if(check_available()){
-                Pieces tempBlank = Pieces(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
+                Pieces tempBlank(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
                 board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
                 board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
                 changeTurn();
