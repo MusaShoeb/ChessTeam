@@ -101,16 +101,19 @@ public:
         if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
             board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         //vice versa
         else if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
             board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         //if the piece just moves to a blank space 
         else{
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
             board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         
         
@@ -119,14 +122,22 @@ public:
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
     void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
             //more methods in here? one for each piece?
+            /*
+            
             if(check_available()){
                 Pieces tempBlank(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
                 board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
                 board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
                 changeTurn();
             }
-             
+
+            */
         }
+    
+    bool isCheck(){
+
+        return false;
+    }
 
     bool isCheckmate() {
 
@@ -136,8 +147,13 @@ public:
     bool isStalemate() {
 
         return false;
+    }
 
-    bool check_available(Pieces& currentPiece, int desired_x_space, int desired_y_space){
+    bool check_available(int initialx, int initialy, int desired_x_space, int desired_y_space){
+            Pieces& currentPiece = board[initialx][initialy];
+            if(currentPiece.getPiece() == BLANK){
+                return false;
+            }
             int x_spaces = currentPiece.getRow() - desired_x_space;
             int y_spaces = currentPiece.getColumn() - desired_y_space;
             if(currentPiece.getPiece() ==  ROOK){
@@ -318,11 +334,11 @@ public:
                 // WE THEN CHECK TO MAKE SURE THAT THE PIECE HAS NOT MOVED WHICH KIND OF MAKES EVERYTHING BEFORE USELESS
                 //THEN WE MAKE SURE THE DESIRED SPOT IS TWO SPACES AWAY BECAUSE THAT IS WHAT CASTLING IS 
                 else if ((((currentPiece.getColor() == BLACK && currentPiece.getColumn() == 8) || (currentPiece.getColor() == WHITE && currentPiece.getColumn() == 1)) 
-                && ( currentPiece.getColumn() == 5)) && (currentPiece.has_moved == false) && (abs(x_spaces) == 2) && isCheck(currentPiece,desired_x_space,desired_y_space) == false)
+                && ( currentPiece.getColumn() == 5)) && (currentPiece.has_moved == false) && (abs(x_spaces) == 2) && isCheck(/*currentPiece,desired_x_space,desired_y_space*/) == false)
                 {
                     for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){
                         try{
-                            if(board[i][currentPiece.getColumn()].getPiece() != NONE){
+                            if(board[i][currentPiece.getColumn()].getPiece() != BLANK){
                                 throw out_of_range("DUMB");
                                 return false;
                             }
@@ -338,6 +354,7 @@ public:
                 }
                 
             }
+            return true;
         }
 
 

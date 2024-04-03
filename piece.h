@@ -16,6 +16,7 @@ class Pieces{
             piece_Number = number_Of_Piece;
             current_row = starting_ROW;
             current_column = starting_column;
+            has_moved = false;
         }
         
         piece getPiece(){
@@ -63,11 +64,13 @@ class Pieces{
             current_row = sample.current_column;
         }
         */
-    
+       
+    bool has_moved;
     private:
         piece pieceType;
         color colorType;
         int piece_Number;
         int current_column;
         int current_row;
+        
 };

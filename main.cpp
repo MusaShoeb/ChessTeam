@@ -49,13 +49,13 @@ int main() {
 			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;
 
 			// move pieces that the user wants 
-			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
-
+			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
+				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+				// change to Black's turn for the next do-while loop iteration
+				game.changeTurn();
+			}
 			// increase the counter
 			game.incMoveCount();
-
-			// change to black's turn for the next do-while loop iteration
-			game.changeTurn();
 
 		}
 		//black's turn
@@ -89,17 +89,19 @@ int main() {
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
 			
 			// move pieces that the user wants 
-			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
+				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+				// change to white's turn for the next do-while loop iteration
+				game.changeTurn();
+			}
 			
 			// increase the counter
 			game.incMoveCount();
 			
-			// change to white's turn for the next do-while loop iteration
-			game.changeTurn();
 		}
 
 		// this is a temp game loop 
-	}while(game.getMoveCount() != 4);
+	}while(game.getMoveCount() != 10);
 
 	return 0;
 };
