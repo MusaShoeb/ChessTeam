@@ -1,20 +1,27 @@
 #include <iostream>
-using namespace std;
 #include <cmath>
-
-
+using namespace std;
 
 class gameManager {
 
 private:
-    Pieces board[8][8];
     bool whitesTurn = true;
     int moveCount = 0;
+    Pieces board[8][8] = {
+            Pieces(BLACK, 1, ROOK, 7, 0), Pieces(BLACK, 0, KNIGHT, 7, 1),   Pieces(BLACK, 0, BISHOP, 7, 2), Pieces(BLACK, 0, QUEEN, 7, 3),  Pieces(BLACK, 0, KING, 7, 4),   Pieces(BLACK, 0, BISHOP, 7, 5), Pieces(BLACK, 0, KNIGHT, 7, 6), Pieces(BLACK, 2, ROOK, 7, 7),
+            Pieces(BLACK, 0, PAWN, 6, 0), Pieces(BLACK, 0, PAWN,   6, 1),   Pieces(BLACK, 0, PAWN,   6, 2), Pieces(BLACK, 0, PAWN,  6, 3),  Pieces(BLACK, 0, PAWN, 6, 4),   Pieces(BLACK, 0, PAWN,   6, 5), Pieces(BLACK, 0, PAWN,   6, 6), Pieces(BLACK, 0, PAWN, 6, 7),
+            Pieces(NONE, 0, BLANK, 5, 0), Pieces(NONE, 0, BLANK,   5, 1),   Pieces(NONE, 0, BLANK,   5, 2), Pieces(NONE, 0, BLANK,  5, 3),  Pieces(NONE, 0, BLANK, 5, 4),   Pieces(NONE, 0, BLANK,   5, 5), Pieces(NONE, 0, BLANK,   5, 6), Pieces(NONE, 0, BLANK, 5, 7),
+            Pieces(NONE, 0, BLANK, 4, 0), Pieces(NONE, 0, BLANK,   4, 1),   Pieces(NONE, 0, BLANK,   4, 2), Pieces(NONE, 0, BLANK,  4, 3),  Pieces(NONE, 0, BLANK, 4, 4),   Pieces(NONE, 0, BLANK,   4, 5), Pieces(NONE, 0, BLANK,   4, 6), Pieces(NONE, 0, BLANK, 4, 7),
+            Pieces(NONE, 0, BLANK, 3, 0), Pieces(NONE, 0, BLANK,   3, 1),   Pieces(NONE, 0, BLANK,   3, 2), Pieces(NONE, 0, BLANK,  3, 3),  Pieces(NONE, 0, BLANK, 3, 4),   Pieces(NONE, 0, BLANK,   3, 5), Pieces(NONE, 0, BLANK,   3, 6), Pieces(NONE, 0, BLANK, 3, 7),
+            Pieces(NONE, 0, BLANK, 2, 0), Pieces(NONE, 0, BLANK,   2, 1),   Pieces(NONE, 0, BLANK,   2, 2), Pieces(NONE, 0, BLANK,  2, 3),  Pieces(NONE, 0, BLANK, 2, 4),   Pieces(NONE, 0, BLANK,   2, 5), Pieces(NONE, 0, BLANK,   2, 6), Pieces(NONE, 0, BLANK, 2, 7),
+            Pieces(WHITE, 0, PAWN, 1, 0), Pieces(WHITE, 0, PAWN,   1, 1),   Pieces(WHITE, 0, PAWN,   1, 2), Pieces(WHITE, 0, PAWN,  1, 3),  Pieces(WHITE, 0, PAWN, 1, 4),   Pieces(WHITE, 0, PAWN,   1, 5), Pieces(WHITE, 0, PAWN,   1, 6), Pieces(WHITE, 0, PAWN, 1, 7),
+            Pieces(WHITE, 0, ROOK, 0, 0), Pieces(WHITE, 0, KNIGHT, 0, 1),   Pieces(WHITE, 0, BISHOP, 0, 2), Pieces(WHITE, 0, QUEEN, 0, 3),  Pieces(WHITE, 0, KING, 0, 4),   Pieces(WHITE, 0, BISHOP, 0, 5), Pieces(WHITE, 0, KNIGHT, 0, 6), Pieces(WHITE, 0, ROOK, 0, 7),
+    };
 
 public:
     // constructor
     gameManager() {
-        printBoard();
+        
     }
 
     bool isItWhitesTurn() {                 // not yet operated // 
@@ -26,13 +33,13 @@ public:
     }
 
     void printBoard() {
-
+        cout << "-------------------------";
+        cout << endl;
         for (int i = 0; i < 8; i++) {
+            cout << '|';
             for (int j = 0; j < 8; j++) {
                 piece piecetype = board[i][j].getPiece();  // adding coordinates later today 
                 color colortype = board[i][j].getColor();
-                cout << board[i][j].getPiece(); << "\n"
-
 
                 //below can be used of check of piece 
                     // if peicetype called at coordinates x,y 
@@ -57,9 +64,16 @@ public:
                     break;
                   // above can be usful for checking 
                 }
-
+                char colorSymbol = ' '; // default value for color
+                if(colortype == WHITE)
+                    colorSymbol = 'W';
+                if(colortype == BLACK)
+                    colorSymbol = 'B';
+                cout << colorSymbol << symbol << '|';
               
             }
+            cout << endl;
+            cout << "-------------------------";
             cout << endl;
         }
     }
@@ -68,28 +82,45 @@ public:
         /// ///////////dany edit above naming peices others for alternative, below movement of peice from a certian positon - who ever doing movement let me see what u got planned please :
         /// </summary>
 
-        void coordbypeicenum(int piece_number) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board[i][j].getNumber() == piece_number) {
+    void coordbypeicenum(int piece_number) {
 
-                    piece piecetype = board[i][j].getPiece(); 
-                    // Assuming getPiece is just to access the piece and not necessary for finding coordinates //coordinates are already stated in board and is falls in with each peice
-                    cout << "Coordinates for piece number " << piece_number << ": " << i << ", " << j << endl;
-                    cout << "Piece that has been chosen for movement: " << piecetype << endl; 
-                    return; // Exit the function after finding and printing the piece
-                }
-            }
-        }
-        cout << "Piece number " << piece_number << " not found." << endl;
     }
 
+    void movePiece(int intColumnOfPieceToMove, int rowOfPieceToMove, int intColumnOfPieceToGoTo, int rowOfPieceToGoTo){
+        
+        /*Created a temp object to deep copy after replacing the piece to go to with the piece that wanted to move*/
+        /*Not space efficient but also created a blank object in case of takes*/
+
+        // the problem with this is that the row and column data inside the piece objects are not accurate.
+
+        Pieces tempObj = board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo];
+        Pieces blankObj(NONE, 0, BLANK, 7 - rowOfPieceToMove, intColumnOfPieceToMove);
+
+        //if it is white turn and the piece at the desired spot to move at is black, then replace the black piece with the white piece
+        //then replace the spot the white piece was with a blank space.
+        if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        }
+        //vice versa
+        else if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+        }
+        //if the piece just moves to a blank space 
+        else{
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+        }
+        
+        
+    }
 
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
-        void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
+    void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
             //more methods in here? one for each piece?
-            if(check_available(board[columnPieceThatsMoving][rowPieceThatsMoving], columnPieceThatsMoving - columnItGoesTo, rowPieceThatsMoving - rowItGoesTo)){
-                Pieces tempBlank = Pieces(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
+            if(check_available()){
+                Pieces tempBlank(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
                 board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
                 board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
                 changeTurn();
@@ -101,6 +132,11 @@ public:
 
         return false;
     }
+  
+    bool isStalemate() {
+
+        return false;
+
     bool check_available(Pieces& currentPiece, int desired_x_space, int desired_y_space){
             int x_spaces = currentPiece.getRow() - desired_x_space;
             int y_spaces = currentPiece.getColumn() - desired_y_space;
@@ -304,12 +340,6 @@ public:
             }
         }
 
-    // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
-    void attemptMove(string move) {
-        //more methods in here? one for each piece?
-
-        
-    }
 
     // these two are mostly for testing
     void incMoveCount() {
@@ -317,32 +347,5 @@ public:
     }
     int getMoveCount() {
         return moveCount;
-
     }
-
-
-
-
-
-    Pieces board[8][8] = {
-            Pieces(BLACK, 1, ROOK, 7, 0), Pieces(BLACK, 0, KNIGHT, 7, 1),   Pieces(BLACK, 0, BISHOP, 7, 2), Pieces(BLACK, 0, QUEEN, 7, 3),  Pieces(BLACK, 0, KING, 7, 4),   Pieces(BLACK, 0, BISHOP, 7, 5), Pieces(BLACK, 0, KNIGHT, 7, 6), Pieces(BLACK, 2, ROOK, 7, 7),
-            Pieces(BLACK, 0, PAWN, 6, 0), Pieces(BLACK, 0, PAWN,   6, 1),   Pieces(BLACK, 0, PAWN,   6, 2), Pieces(BLACK, 0, PAWN,  6, 3),  Pieces(BLACK, 0, PAWN, 6, 4),   Pieces(BLACK, 0, PAWN,   6, 5), Pieces(BLACK, 0, PAWN,   6, 6), Pieces(BLACK, 0, PAWN, 6, 7),
-            Pieces(NONE, 0, BLANK, 5, 0), Pieces(NONE, 0, BLANK,   5, 1),   Pieces(NONE, 0, BLANK,   5, 2), Pieces(NONE, 0, BLANK,  5, 3),  Pieces(NONE, 0, BLANK, 5, 4),   Pieces(NONE, 0, BLANK,   5, 5), Pieces(NONE, 0, BLANK,   5, 6), Pieces(NONE, 0, BLANK, 5, 7),
-            Pieces(NONE, 0, BLANK, 4, 0), Pieces(NONE, 0, BLANK,   4, 1),   Pieces(NONE, 0, BLANK,   4, 2), Pieces(NONE, 0, BLANK,  4, 3),  Pieces(NONE, 0, BLANK, 4, 4),   Pieces(NONE, 0, BLANK,   4, 5), Pieces(NONE, 0, BLANK,   4, 6), Pieces(NONE, 0, BLANK, 4, 7),
-            Pieces(NONE, 0, BLANK, 3, 0), Pieces(NONE, 0, BLANK,   3, 1),   Pieces(NONE, 0, BLANK,   3, 2), Pieces(NONE, 0, BLANK,  3, 3),  Pieces(NONE, 0, BLANK, 3, 4),   Pieces(NONE, 0, BLANK,   3, 5), Pieces(NONE, 0, BLANK,   3, 6), Pieces(NONE, 0, BLANK, 3, 7),
-            Pieces(NONE, 0, BLANK, 2, 0), Pieces(NONE, 0, BLANK,   2, 1),   Pieces(NONE, 0, BLANK,   2, 2), Pieces(NONE, 0, BLANK,  2, 3),  Pieces(NONE, 0, BLANK, 2, 4),   Pieces(NONE, 0, BLANK,   2, 5), Pieces(NONE, 0, BLANK,   2, 6), Pieces(NONE, 0, BLANK, 2, 7),
-            Pieces(WHITE, 0, PAWN, 1, 0), Pieces(WHITE, 0, PAWN,   1, 1),   Pieces(WHITE, 0, PAWN,   1, 2), Pieces(WHITE, 0, PAWN,  1, 3),  Pieces(WHITE, 0, PAWN, 1, 4),   Pieces(WHITE, 0, PAWN,   1, 5), Pieces(WHITE, 0, PAWN,   1, 6), Pieces(WHITE, 0, PAWN, 1, 7),
-            Pieces(WHITE, 0, ROOK, 0, 0), Pieces(WHITE, 0, KNIGHT, 0, 1),   Pieces(WHITE, 0, BISHOP, 0, 2), Pieces(WHITE, 0, QUEEN, 0, 3),  Pieces(WHITE, 0, KING, 0, 4),   Pieces(WHITE, 0, BISHOP, 0, 5), Pieces(WHITE, 0, KNIGHT, 0, 6), Pieces(WHITE, 0, ROOK, 0, 7),
-    };
-
-
-
-    // todo
-    // order goes: color, piece number, piece type, row, column
-    // make sure to do the blank pieces (BLANK for piece type, NONE fo color)
-
-
-
-
-
 };
