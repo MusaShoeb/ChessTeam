@@ -78,6 +78,27 @@ public:
         }
     }
 
+    //This shows the values of the getRow and getColumn Function of the Pieces Value.
+    // AKA it shows where every piece "thinks" it is 
+    void printBoardTEST() {
+        cout << "-------------------------";
+        cout << endl;
+        for (int i = 0; i < 8; i++) {
+            cout << '|';
+            for (int j = 0; j < 8; j++) {
+                Pieces piecetype = board[i][j];  // adding coordinates later today 
+                color colortype = board[i][j].getColor();
+
+                cout << piecetype.getColumn() << piecetype.getRow() << '|';
+
+              
+            }
+            cout << endl;
+            cout << "-------------------------";
+            cout << endl;
+        }
+    }
+
         /// <summary>
         /// ///////////dany edit above naming peices others for alternative, below movement of peice from a certian positon - who ever doing movement let me see what u got planned please :
         /// </summary>
@@ -357,12 +378,26 @@ public:
             return true;
         }
 
-
     // these two are mostly for testing
     void incMoveCount() {
         moveCount++;
     }
+
     int getMoveCount() {
         return moveCount;
+    }
+
+    void printBoardSpaces(){
+        cout << "-------------------------";
+        cout << endl;
+        for (int i = 0; i < 8; i++) {
+            cout << '|';
+            for (int j = 0; j < 8; j++) {
+                cout << char(j + 97) << abs(i - 7) + 1 << '|';
+            }
+            cout << endl;
+            cout << "-------------------------";
+            cout << endl;
+        }
     }
 };

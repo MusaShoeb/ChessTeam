@@ -14,7 +14,9 @@ int main() {
 	int intColumnOfPieceToGoTo = -1;
 
 	do{
+		game.printBoardSpaces();
 		game.printBoard();
+		game.printBoardTEST();
 		//whites turn first
 		if( game.isItWhitesTurn() ){
 			do{
