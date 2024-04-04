@@ -225,37 +225,48 @@ public:
 
             //rooks
             if(currentPiece.getPiece() ==  ROOK){
-                
-                //if rows are changing and columns are not 
-                if(currentPiece.getColumn() - columnItGoesTo == 0){
-                    for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
-                    if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
-                        return false;
-                    }
+
+                //checks for diagonal
+                if(currentPiece.getColumn() - columnItGoesTo != 0 &&
+                   currentPiece.getRow() - rowItGoesTo != 0){
+                    return false;
                 }
 
+                //if rows are changing and columns are not 
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    if(currentPiece.getRow() < rowItGoesTo){
+                        for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
+                    }                    
+                }
                 //if rows are changing and columns are not
                 //other direction
                 if(currentPiece.getColumn() - columnItGoesTo == 0){
-                    for(int i = rowItGoesTo - 1; i < currentPiece.getRow(); i++)
-                    if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
-                        return false;
+                    if(currentPiece.getRow() > rowItGoesTo){
+                        for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
                     }
                 }
-
                 //if columns are changing and rows are not 
                 if(currentPiece.getRow() - rowItGoesTo == 0){
-                    for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
-                    if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
-                        return false;
-                    }
+                    if(currentPiece.getColumn() < columnItGoesTo){
+                        for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
+                    }   
                 }
-
                 //other direction
                 if(currentPiece.getRow() - rowItGoesTo == 0){
-                    for(int i = columnItGoesTo - 1; i < currentPiece.getColumn(); i++)
-                    if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
-                        return false;
+                    if(currentPiece.getColumn() > columnItGoesTo){
+                        for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
                     }
                 }
                 return true;
@@ -304,8 +315,92 @@ public:
             }  
             //queens
             if(currentPiece.getPiece() == QUEEN){ //TODO
+                int desired_x_space = columnItGoesTo;
+                int desired_y_space = rowItGoesTo;
+                int x_spaces = currentPiece.getColumn() - desired_x_space;
+                int y_spaces = currentPiece.getRow() - desired_y_space;
 
+                //THE ROOK PART OF THE QUEEN slay pur pur
+                //if rows are changing and columns are not 
+                                //checks for diagonal
+                if(currentPiece.getColumn() - columnItGoesTo != 0 &&
+                   currentPiece.getRow() - rowItGoesTo != 0){
+                    return false;
+                }
+
+                //if rows are changing and columns are not 
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    if(currentPiece.getRow() < rowItGoesTo){
+                        for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
+                    }                    
+                }
+                //if rows are changing and columns are not
+                //other direction
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    if(currentPiece.getRow() > rowItGoesTo){
+                        for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
+                    }
+                }
+                //if columns are changing and rows are not 
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    if(currentPiece.getColumn() < columnItGoesTo){
+                        for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
+                    }   
+                }
+                //other direction
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    if(currentPiece.getColumn() > columnItGoesTo){
+                        for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
+                    }
+                }
                 return true;
+
+                //the bishop part of the queen
+                if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
+                //we need to increment the x coord and the y coord at the same time so that it why initizalied both the i and the j
+                // we are checking the desired row is less than or greater than the row we are currently on and same goes for the column                       
+                    for(int i = currentPiece.getRow(), j = currentPiece.getColumn(); i < desired_x_space ? (i < x_spaces):(i > x_spaces),
+                                j < desired_y_space ? (j < desired_y_space):(j > desired_y_space); i += (x_spaces > 0)  ? 1:-1, j += (y_spaces > 0)  ? 1:-1){ //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
+                        //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
+                            try{
+                                //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
+                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
+                                if(board[i][j].getColor() != currentPiece.getColor()){                                
+                                    if(board[i][j].getColor() != NONE){
+                                        //THIS MEANS THAT WE ARE ATTACKING ADD IN THE ATTACKING CODE HERE
+                                        return true; //TEMP
+                                    }
+                                    else{
+                                        //THIS MEANS THE SPACE WE WANT TO MOVE TO HAS NO PIECE ON IT. IT IS VALID TO MOVE THERE
+                                        
+                                    }                            
+                                }
+                                //WE ENTER THIS IF WE FIND OUT THAT THERE IS A PIECE IN THE PATH OF WHERE WE WANT TO MOVE 
+                                else{
+                                    
+                                    throw out_of_range("puss");
+                                }  
+                            }
+                            catch(out_of_range){
+                                return false;
+                            }
+                    }
+                
+                }
+            return true;
+            
             }       
             //knights 
             if(currentPiece.getPiece() == KNIGHT){ 
@@ -315,7 +410,7 @@ public:
                     if(currentPiece.getRow() + dx[i] == rowItGoesTo &&
                        currentPiece.getColumn() + dy[i] == columnItGoesTo){
                         return true;
-                       }
+                    }
                 }
                 return false;
             }
