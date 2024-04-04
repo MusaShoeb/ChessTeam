@@ -114,7 +114,10 @@ public:
 
         // the problem with this is that the row and column data inside the piece objects are not accurate.
 
-        Pieces tempObj = board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo];
+        Pieces tempObj;
+        
+        tempObj.setColor(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor());
+        tempObj.setPiece(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getPiece());
         Pieces blankObj(NONE, 0, BLANK, 7 - rowOfPieceToMove, intColumnOfPieceToMove);
 
         //if it is white turn and the piece at the desired spot to move at is black, then replace the black piece with the white piece
@@ -132,12 +135,35 @@ public:
         }
         //if the piece just moves to a blank space 
         else{
-            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
-            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setColor(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getColor());
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setPiece(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getPiece());
+            
+
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setColor(tempObj.getColor());  
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setPiece(tempObj.getPiece());  
+
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         
-        
+    }
+
+    bool checkpawn(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
+        //assume that a pawn is selected 
+
+        /*TODO:
+            Check if the piece has moved
+            If it has not moved then it can move two spaces in front of it
+            check if there is a piece infront of it
+            check if there is a black piece diagonal of this piece to take 
+
+            return true if the move is legal
+            return false if the move is illegal 
+        */
+        if(board[rowPieceThatsMoving+1][columnPieceThatsMoving].getPiece() == BLACK || board[rowPieceThatsMoving+1][columnPieceThatsMoving].getPiece() == WHITE){
+            return false;
+        }
+
+
     }
 
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
@@ -175,8 +201,8 @@ public:
             if(currentPiece.getPiece() == BLANK){
                 return false;
             }
-            int x_spaces = currentPiece.getRow() - desired_x_space;
-            int y_spaces = currentPiece.getColumn() - desired_y_space;
+            int x_spaces = currentPiece.getColumn() - desired_x_space;
+            int y_spaces = currentPiece.getRow() - desired_y_space;
             if(currentPiece.getPiece() ==  ROOK){
                 if((x_spaces != y_spaces) && ((x_spaces > 0) || (y_spaces > 0)))
                 for(int i = currentPiece.getRow();  (i < x_spaces); i += (x_spaces > 0)  ? 1:-1){

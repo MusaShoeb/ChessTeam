@@ -12,9 +12,9 @@ int main() {
 	int rowOfPieceToGoTo = -1;
 	char columnOfPieceToGoTo = ' ';
 	int intColumnOfPieceToGoTo = -1;
-
+	//game.printBoardSpaces();
 	do{
-		game.printBoardSpaces();
+		
 		game.printBoard();
 		game.printBoardTEST();
 		//whites turn first
@@ -53,11 +53,14 @@ int main() {
 			// move pieces that the user wants 
 			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
 				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+				
+				// increase the counter
+				game.incMoveCount();
+
 				// change to Black's turn for the next do-while loop iteration
 				game.changeTurn();
 			}
-			// increase the counter
-			game.incMoveCount();
+			
 
 		}
 		//black's turn
@@ -94,11 +97,14 @@ int main() {
 			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
 				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
 				// change to white's turn for the next do-while loop iteration
+				
+				// increase the counter
+				game.incMoveCount();
+				
 				game.changeTurn();
 			}
 			
-			// increase the counter
-			game.incMoveCount();
+			
 			
 		}
 

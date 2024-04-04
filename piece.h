@@ -9,10 +9,10 @@ enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
 class Pieces{
     
     public:
-
         Pieces(){
             
         }
+
         Pieces(color the_Color, int number_Of_Piece, piece type_Of_Piece , int starting_ROW , int starting_column){
             pieceType = type_Of_Piece;
             colorType = the_Color;
