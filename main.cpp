@@ -12,11 +12,11 @@ int main() {
 	int rowOfPieceToGoTo = -1;
 	char columnOfPieceToGoTo = ' ';
 	int intColumnOfPieceToGoTo = -1;
-	//game.printBoardSpaces();
+	game.printBoardSpaces();
 	do{
 		
 		game.printBoard();
-		game.printBoardTEST();
+		//game.printBoardTEST();
 		//whites turn first
 		if( game.isItWhitesTurn() ){
 			do{
@@ -110,7 +110,7 @@ int main() {
 
 		// this is a temp game loop 
 	}while(game.getMoveCount() != 10);
-
+	cout << endl << "***hit turn limit***" << endl;
 	return 0;
 };
 

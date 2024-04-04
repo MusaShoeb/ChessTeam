@@ -148,22 +148,7 @@ public:
     }
 
     bool checkpawn(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
-        //assume that a pawn is selected 
-
-        /*TODO:
-            Check if the piece has moved
-            If it has not moved then it can move two spaces in front of it
-            check if there is a piece infront of it
-            check if there is a black piece diagonal of this piece to take 
-
-            return true if the move is legal
-            return false if the move is illegal 
-        */
-        if(board[rowPieceThatsMoving+1][columnPieceThatsMoving].getPiece() == BLACK || board[rowPieceThatsMoving+1][columnPieceThatsMoving].getPiece() == WHITE){
-            return false;
-        }
-
-
+        return true;
     }
 
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
@@ -196,62 +181,52 @@ public:
         return false;
     }
 
-    bool check_available(int initialx, int initialy, int desired_x_space, int desired_y_space){
-            Pieces& currentPiece = board[initialx][initialy];
+    bool check_available(int rowPieceThatsMoving, int columnPieceThatsMoving, int rowItGoesTo, int columnItGoesTo){
+            Pieces& currentPiece = board[7 - rowPieceThatsMoving][columnPieceThatsMoving];
+            // if the piece being moved is empty
             if(currentPiece.getPiece() == BLANK){
                 return false;
             }
-            int x_spaces = currentPiece.getColumn() - desired_x_space;
-            int y_spaces = currentPiece.getRow() - desired_y_space;
-            if(currentPiece.getPiece() ==  ROOK){
-                if((x_spaces != y_spaces) && ((x_spaces > 0) || (y_spaces > 0))){
-                    //UNSURE IF WE NEED <= OR < WE NEED TO CHECK THE DESIRED SPACE THAT THE PIECE WANTS TO MOVE SO I THINK IT IS <= 
-                    //LETS SAY OUR DESIRED ROW IS 5 AND OUR PIECE IS ON 3 THAT WOULD MEAN i is less our desired_x_space 
-                    //so we will run this for loop until i is greater than desired_x_space 
-                    //x_spaces is = to the difference between our desired row and our current row so in this Example x_spaecs = 2
-                    //2 is greater than 0 so we will increase our current row by 1 moving us closer to our desired_x_space
-                    //Visa versa if in desired row is less than our current row
-                    for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){ 
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                    
-                    //Same thing as row explaination but with the word row swapped with column
-                    for(int i = currentPiece.getColumn();  i < desired_y_space ? (i < desired_y_space): i > desired_y_space; i += (y_spaces > 0)  ? 1:-1){                        
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                }
-            return true;
+            //if the piece being moved is not that players turn
+            if(currentPiece.getColor() == WHITE && !whitesTurn){
+                return false;
             }
+            if(currentPiece.getColor() == BLACK && whitesTurn){
+                return false;
+            }
+            //if the piece being moved is trying to takes its own piece 
+            if(currentPiece.getColor() == board[7 - rowItGoesTo][columnItGoesTo].getColor()){
+                return false;
+            }
+
+            //rooks
+            if(currentPiece.getPiece() ==  ROOK){
+                
+                //if rows are changing and columns are not 
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                    if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                        return false;
+                    }
+                }
+                //if columns are changing and rows are not 
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                    if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            //bishops
             if(currentPiece.getPiece() ==  BISHOP){
+
+                int desired_x_space = columnItGoesTo;
+                int desired_y_space = rowItGoesTo;
+                int x_spaces = currentPiece.getColumn() - desired_x_space;
+                int y_spaces = currentPiece.getRow() - desired_y_space;
+
                 if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
                 //we need to increment the x coord and the y coord at the same time so that it why initizalied both the i and the j
                 // we are checking the desired row is less than or greater than the row we are currently on and same goes for the column                       
@@ -284,143 +259,44 @@ public:
                 
                 }
             return true;
+                return true;
             }  
+            //queens
             if(currentPiece.getPiece() == QUEEN){ //TODO
-                //THE ROOK PART OF THE QUEEN slay pur pur
-                if((x_spaces != y_spaces) && ((x_spaces > 0) || (y_spaces > 0))){
-                    //UNSURE IF WE NEED <= OR < WE NEED TO CHECK THE DESIRED SPACE THAT THE PIECE WANTS TO MOVE SO I THINK IT IS <= 
-                    //LETS SAY OUR DESIRED ROW IS 5 AND OUR PIECE IS ON 3 THAT WOULD MEAN i is less our desired_x_space 
-                    //so we will run this for loop until i is greater than desired_x_space 
-                    //x_spaces is = to the difference between our desired row and our current row so in this Example x_spaecs = 2
-                    //2 is greater than 0 so we will increase our current row by 1 moving us closer to our desired_x_space
-                    //Visa versa if in desired row is less than our current row
-                    for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){ 
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                    
-                    //Same thing as row explaination but with the word row swapped with column
-                    for(int i = currentPiece.getColumn();  i < desired_y_space ? (i < desired_y_space): i > desired_y_space; i += (y_spaces > 0)  ? 1:-1){                        
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                }
-                //the bishop part of the queen
-                
-                if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
-                //we need to increment the x coord and the y coord at the same time so that it why initizalied both the i and the j
-                // we are checking the desired row is less than or greater than the row we are currently on and same goes for the column                       
-                    for(int i = currentPiece.getRow(), j = currentPiece.getColumn(); i < desired_x_space ? (i < x_spaces):(i > x_spaces),
-                                j < desired_y_space ? (j < desired_y_space):(j > desired_y_space); i += (x_spaces > 0)  ? 1:-1, j += (y_spaces > 0)  ? 1:-1){ //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
-                        //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
-                            try{
-                                //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
-                                if(board[i][j].getColor() != currentPiece.getColor()){                                
-                                    if(board[i][j].getColor() != NONE){
-                                        //THIS MEANS THAT WE ARE ATTACKING ADD IN THE ATTACKING CODE HERE
-                                        return true; //TEMP
-                                    }
-                                    else{
-                                        //THIS MEANS THE SPACE WE WANT TO MOVE TO HAS NO PIECE ON IT. IT IS VALID TO MOVE THERE
-                                        
-                                    }                            
-                                }
-                                //WE ENTER THIS IF WE FIND OUT THAT THERE IS A PIECE IN THE PATH OF WHERE WE WANT TO MOVE 
-                                else{
-                                    
-                                    throw out_of_range("puss");
-                                }  
-                            }
-                            catch(out_of_range){
-                                return false;
-                            }
-                    }
-                
-                }
-            return true;
-            
-            }        
-            if(currentPiece.getPiece() == KNIGHT){ //TODO
+
+                return true;
+            }       
+            //knights 
+            if(currentPiece.getPiece() == KNIGHT){ 
                 int dx[] = {-2, -1, 1, 2, -2, -1, 1, 2};   
                 int dy[] = {-1, -2, -2, -1, 1, 2, 2, 1};
-                for(int i = 0; i < 8; i++){
-                    //IF THE PLACE THEY WANT TO MOVE TO FOLLOWS ONE OF THE PATTERNS  ABOVE THEY ARE GOOD TO MOVE THERE
-                    if((desired_x_space == currentPiece.getRow() + dx[i]) && (desired_y_space == currentPiece.getColumn() + dy[i])) {
-                        if(board[currentPiece.getRow()+dx[i]][currentPiece.getColumn() + dy[i]].getColor() != currentPiece.getColor()){
-                            if(board[currentPiece.getRow()+dx[i]][currentPiece.getColumn() + dy[i]].getColor() != NONE){
-                                //THIS MEANS THAT THE PIECE CAN ATTACK THE ENEMY PIECE ADD THE ATTACKING CODE HERE
-                                return true;
-                            }
-                            //THIS MEANS THAT THEY ARE JUST MOVING TO THE OTHER SQUARE
-                            else{ 
-                                return  true; 
-                            }
-                            //THIS MEANST THAT THE PLACE THEY WANTED TO MOVE TO WAS OCCUPIED BY A FRIENDLY 
-                            return false;
-                        }
-                            
-                    }
+                for(int i = 0; i <= 7; i++){
+                    if(currentPiece.getRow() + dx[i] == rowItGoesTo &&
+                       currentPiece.getColumn() + dy[i] == columnItGoesTo){
+                        return true;
+                       }
                 }
-                    
+                return false;
             }
-            if(currentPiece.getPiece() ==  KING){ // the king is only allowed to move one square at a time so that is what this is
-                if( (abs(x_spaces) <= 1) && abs(y_spaces <= 1)){
+            //kings
+            if(currentPiece.getPiece() ==  KING){ 
+                if(abs(currentPiece.getRow() - rowItGoesTo) <= 1 &&
+                   abs(currentPiece.getColumn() - columnItGoesTo <= 1))
+                   {
+                        return true;
+                   }
+                else if(false /* attempts castle */){
 
                 }
-                //IF THE CURRENT PIECE IS BLACK WE CHECK TO SEE IF IT IS ON THE 8th FILE AND IF IT IS WHITE WE CHECK TO SEE IF IT IS ON THE 1ST FILE
-                //THEN WE CHECK TO MAKE SURE WE ARE STARTING ON THE RIGHT SPOT 
-                // WE THEN CHECK TO MAKE SURE THAT THE PIECE HAS NOT MOVED WHICH KIND OF MAKES EVERYTHING BEFORE USELESS
-                //THEN WE MAKE SURE THE DESIRED SPOT IS TWO SPACES AWAY BECAUSE THAT IS WHAT CASTLING IS 
-                else if ((((currentPiece.getColor() == BLACK && currentPiece.getColumn() == 8) || (currentPiece.getColor() == WHITE && currentPiece.getColumn() == 1)) 
-                && ( currentPiece.getColumn() == 5)) && (currentPiece.has_moved == false) && (abs(x_spaces) == 2) && isCheck(/*currentPiece,desired_x_space,desired_y_space*/) == false)
-                {
-                    for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){
-                        try{
-                            if(board[i][currentPiece.getColumn()].getPiece() != BLANK){
-                                throw out_of_range("DUMB");
-                                return false;
-                            }
-                            else{
+                return false;
 
-                            }
-                        }
-                        catch (out_of_range){
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-                
             }
-            return true;
+            if(currentPiece.getPiece() == PAWN){
+
+                return true;       
+            }
+
+        abort();  
         }
 
     // these two are mostly for testing

@@ -67,7 +67,8 @@ class Pieces{
             current_row = sample.current_column;
         }
         */
-       
+    
+    // I dont feel like making gets and sets so has_moved is public - H
     bool has_moved;
     private:
         piece pieceType;
