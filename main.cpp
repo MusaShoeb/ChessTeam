@@ -12,7 +12,7 @@ int main() {
 	int rowOfPieceToGoTo = -1;
 	char columnOfPieceToGoTo = ' ';
 	int intColumnOfPieceToGoTo = -1;
-	game.printBoardSpaces();
+	//game.printBoardSpaces();
 	do{
 		
 		game.printBoard();

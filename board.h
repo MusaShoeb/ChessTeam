@@ -33,10 +33,10 @@ public:
     }
 
     void printBoard() {
-        cout << "-------------------------";
+        cout << "  -------------------------";
         cout << endl;
         for (int i = 0; i < 8; i++) {
-            cout << '|';
+            cout << 7 - i + 1 << " |";
             for (int j = 0; j < 8; j++) {
                 piece piecetype = board[i][j].getPiece();  // adding coordinates later today 
                 color colortype = board[i][j].getColor();
@@ -73,9 +73,10 @@ public:
               
             }
             cout << endl;
-            cout << "-------------------------";
+            cout << "  -------------------------";
             cout << endl;
         }
+        cout << "   a  b  c  d  e  f  g  h" << endl;
     }
 
     //This shows the values of the getRow and getColumn Function of the Pieces Value.
@@ -259,7 +260,6 @@ public:
                 
                 }
             return true;
-                return true;
             }  
             //queens
             if(currentPiece.getPiece() == QUEEN){ //TODO
