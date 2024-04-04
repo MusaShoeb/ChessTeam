@@ -149,6 +149,29 @@ public:
     }
 
     bool checkpawn(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
+        // return false if they want to move the pawn left and right
+       if(columnItGoesTo != columnPieceThatsMoving){
+        return false;
+       }
+       
+       // if it is white turn and they want to move the pawn 
+       if(whitesTurn){
+
+            // if there is a piece in front of it, return false
+            if(board[rowPieceThatsMoving+1][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving+1][columnPieceThatsMoving].getColor() == WHITE){
+            return false;
+            }
+       }else{
+            // this is for black's turn. If there is a piece "infront of" the black piece, return false 
+            if(board[rowPieceThatsMoving-1][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving-1][columnPieceThatsMoving].getColor() == WHITE){
+                return false;
+            }   
+       }
+        /*
+        if(board[rowPieceThatsMoving+2][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving+2][columnPieceThatsMoving].getColor() == WHITE && board[rowPieceThatsMoving][columnPieceThatsMoving].has_moved){
+            return false;
+        }*/
+        
         return true;
     }
 
@@ -210,9 +233,27 @@ public:
                         return false;
                     }
                 }
+
+                //if rows are changing and columns are not
+                //other direction
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    for(int i = rowItGoesTo - 1; i < currentPiece.getRow(); i++)
+                    if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                        return false;
+                    }
+                }
+
                 //if columns are changing and rows are not 
                 if(currentPiece.getRow() - rowItGoesTo == 0){
                     for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                    if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                        return false;
+                    }
+                }
+
+                //other direction
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    for(int i = columnItGoesTo - 1; i < currentPiece.getColumn(); i++)
                     if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
                         return false;
                     }
