@@ -109,7 +109,7 @@ int main() {
 		}
 
 		// this is a temp game loop 
-	}while(game.getMoveCount() != 20);
+	}while(game.getMoveCount() != 10);
 	cout << endl << "***hit turn limit***" << endl;
 	return 0;
 };

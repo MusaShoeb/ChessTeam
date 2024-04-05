@@ -148,32 +148,6 @@ public:
         
     }
 
-    bool checkpawn(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
-        // return false if they want to move the pawn left and right
-       if(columnItGoesTo != columnPieceThatsMoving){
-        return false;
-       }
-       
-       // if it is white turn and they want to move the pawn 
-       if(whitesTurn){
-
-            // if there is a piece in front of it, return false
-            if(board[rowPieceThatsMoving+1][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving+1][columnPieceThatsMoving].getColor() == WHITE){
-            return false;
-            }
-       }else{
-            // this is for black's turn. If there is a piece "infront of" the black piece, return false 
-            if(board[rowPieceThatsMoving-1][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving-1][columnPieceThatsMoving].getColor() == WHITE){
-                return false;
-            }   
-       }
-        /*
-        if(board[rowPieceThatsMoving+2][columnPieceThatsMoving].getColor() == BLACK || board[rowPieceThatsMoving+2][columnPieceThatsMoving].getColor() == WHITE && board[rowPieceThatsMoving][columnPieceThatsMoving].has_moved){
-            return false;
-        }*/
-        
-        return true;
-    }
 
         // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
     void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
@@ -221,6 +195,99 @@ public:
             //if the piece being moved is trying to takes its own piece 
             if(currentPiece.getColor() == board[7 - rowItGoesTo][columnItGoesTo].getColor()){
                 return false;
+            }
+            
+
+            //Pawns
+            if(currentPiece.getPiece() == PAWN){
+                
+                // return false if they want to move the pawn left and right
+                //this also let the pawn to take piece diagonally from them
+                if(columnItGoesTo != columnPieceThatsMoving && board[7 - rowItGoesTo][columnItGoesTo].getPiece() == BLANK){
+                    return false;
+                }
+
+                
+
+                // checks if the desired spot is the spot behind the current piece
+                if(whitesTurn){
+                    if(rowItGoesTo < currentPiece.getRow()){
+                    return false;
+                    }
+                }
+                
+                else{
+                    if(rowItGoesTo > currentPiece.getRow()){
+                    return false;
+                    }
+                }
+                
+                // If it is white's turn and there is a piece in front of the pawn, return false 
+                if(whitesTurn){
+                    if(board[6 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                    return false;
+                    }
+                }
+                //else it is black's turn and if there is a piece in front of a black piece, return false
+                else{
+                    if(board[8 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                    return false;
+                    }
+                }
+
+             
+                // If the piece has not moved, it cannot move more than two spots or diagonal 
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                       if(rowItGoesTo > currentPiece.getRow() + 2 || columnItGoesTo != columnPieceThatsMoving)
+                        {
+                            return false;
+                        }    
+                    }
+                    else{
+                        if(rowItGoesTo < currentPiece.getRow() - 2 || columnItGoesTo != columnPieceThatsMoving)
+                        {
+                            return false;
+                        }  
+                    }
+                    
+                }
+
+                // implement a check if the piece hasn't moved and they cannot take a piece in the second spot.
+                // if there is a piece at the second spot and the piece that wants to move has not moved, return false
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                        if(board[5 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                        return false;
+                        }
+                    }   
+                //else it is black's turn and if there is a piece in front of a black piece, return false
+                    else{
+                        if(board[9 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                        return false;
+                        }
+                }
+                }
+
+                // If the piece has moved, it cannot move more than two spots 
+                if(currentPiece.has_moved){
+                    if(whitesTurn){
+                       if(rowItGoesTo >= rowPieceThatsMoving + 2)
+                        {
+                            return false;
+                        }    
+                    }
+                    else{
+                        if(rowItGoesTo <= rowPieceThatsMoving - 2)
+                        {
+                            return false;
+                        }  
+                    }
+                    
+                }
+                
+                return true;
+                
             }
 
             //rooks
