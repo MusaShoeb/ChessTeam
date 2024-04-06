@@ -173,11 +173,11 @@ public:
     
     bool isCheck(color kingColor, Pieces board[8][8]){
 
-        int searchRow, originRow;
-        int searchCol, originCol;
+        int searchRow, originRow;   // Used to track the position of the king and the search 
+        int searchCol, originCol;   
 
         if (kingColor == WHITE) {
-             searchCol = whiteKingCol;
+             searchCol = whiteKingCol;     
              originCol = whiteKingCol;
              searchRow = whiteKingRow;
              originRow = whiteKingRow;
@@ -186,7 +186,10 @@ public:
         
         if (kingColor == BLACK) {
              searchCol = blackKingCol;
+             originCol = blackKingCol;
              searchRow = blackKingRow;
+             originRow = blackKingRow;
+
         }
         //For all 8 directions
         struct Direction {
@@ -208,13 +211,17 @@ public:
             Direction(1, -1)
         };
         
+        /* For each of the 8-directions in which a King can be put in check, we search that
+        direction and record any pieces we come across. If any of those pieces are able to reach
+        the king's spot, he is in danger*/
+
         for (const auto& dir : directions) {
             while ((searchRow + dir.ypos >= 0 && searchRow + dir.ypos < 8) && (searchCol + dir.xpos >= 0 && searchCol + dir.xpos < 8)) {
                  searchCol += dir.xpos;
                  searchRow += dir.ypos;
 
-                 if(board[searchRow][searchCol].getColor() != board[originRow][originCol].getColor()) {
-                     if(check_available(searchRow,searchCol,blackKingRow,blackKingCol))
+                 if(board[searchRow][searchCol].getColor() != board[originRow][originCol].getColor()) { //Makes sure the piece is an opponent
+                     if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
                         return true;
                  }
             }
@@ -228,10 +235,13 @@ public:
 
     bool isCheckmate(color KingColor) {
 
-        if (isCheck(KingColor, board)) {
-            availablePieces();
+        /*This function takes the available pieces on a chessboard, and simulates all possible moves
+         for each of them. If no move on any piece removes the check, we can verify that it is checkmate 
+        */
+        if (isCheck(KingColor, board)) {  //Make sure there's a potential for checkmate
+            availablePieces();  //Returns the available pieces on the board
 
-            for (Pieces* piece : availableWhite) {
+            for (Pieces* piece : availableWhite) { //Creates a temporary board to run a simulated move
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         if (check_available(piece->getRow(),piece->getColumn(),board[i][j].getRow(),board[i][j].getColumn())) {
@@ -242,7 +252,7 @@ public:
                             }
                         }
                         movePiece(piece->getColumn(),piece->getRow(),newBoard[i][j].getColumn(),newBoard[i][j].getRow());
-                        if(!isCheck(WHITE,newBoard))
+                        if(!isCheck(WHITE,newBoard)) //Checks if the move was able to get rid of the check
                             return false;
 
 
