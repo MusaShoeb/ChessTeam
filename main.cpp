@@ -3,22 +3,39 @@
 #include "board.h"
 using namespace std;
 
+void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColumnOfPieceToGoTo, int& rowOfPieceToGoTo, bool whitesTurn);
+
 int main() {
 	
 	gameManager game;
 	int rowOfPieceToMove = -1;
-	char columnOfPieceToMove = ' ';
-	int intColumnOfPieceToMove;
+	int intColumnOfPieceToMove = -1;
 	int rowOfPieceToGoTo = -1;
-	char columnOfPieceToGoTo = ' ';
 	int intColumnOfPieceToGoTo = -1;
-	//game.printBoardSpaces();
+
 	do{
-		
 		game.printBoard();
-		//game.printBoardTEST();
-		//whites turn first
-		if( game.isItWhitesTurn() ){
+
+		getInputs(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo, game.isItWhitesTurn());
+
+		// move pieces that the user wants 
+		if(game.check_available(rowOfPieceToMove, intColumnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
+			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+			game.incMoveCount();
+			game.changeTurn();
+		}
+			
+		// this is a temp game loop 
+	}while(game.getMoveCount() != 10);
+	cout << endl << "***hit turn limit***" << endl;
+	return 0;
+};
+
+void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColumnOfPieceToGoTo, int& rowOfPieceToGoTo, bool whitesTurn){
+	char columnOfPieceToMove = ' ';
+	char columnOfPieceToGoTo = ' ';
+
+		if(whitesTurn){
 			do{
 				cout << "column of the piece white wants to move: ";
 				cin >> columnOfPieceToMove;
@@ -46,21 +63,6 @@ int main() {
 				cin >> rowOfPieceToGoTo;
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
-
-			//uncommented below to see what the gets passed to the attemptMoveFunction
-			//cout << intColumnOfPieceToMove << rowOfPieceToMove << intColumnOfPieceToGoTo << rowOfPieceToGoTo;
-
-			// move pieces that the user wants 
-			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
-				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
-				
-				// increase the counter
-				game.incMoveCount();
-
-				// change to Black's turn for the next do-while loop iteration
-				game.changeTurn();
-			}
-			
 
 		}
 		//black's turn
@@ -92,26 +94,5 @@ int main() {
 				cin >> rowOfPieceToGoTo;
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
-			
-			// move pieces that the user wants 
-			if(game.check_available(rowOfPieceToMove, columnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
-				game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
-				// change to white's turn for the next do-while loop iteration
-				
-				// increase the counter
-				game.incMoveCount();
-				
-				game.changeTurn();
-			}
-			
-			
-			
 		}
-
-		// this is a temp game loop 
-	}while(game.getMoveCount() != 10);
-	cout << endl << "***hit turn limit***" << endl;
-	return 0;
-};
-
-
+}

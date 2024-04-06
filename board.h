@@ -208,32 +208,21 @@ public:
                 }
 
                 
-
-                // checks if the desired spot is the spot behind the current piece
-                if(whitesTurn){
-                    if(rowItGoesTo < currentPiece.getRow()){
-                    return false;
-                    }
-                }
-                
-                else{
-                    if(rowItGoesTo > currentPiece.getRow()){
-                    return false;
-                    }
-                }
                 
                 // If it is white's turn and there is a piece in front of the pawn, return false 
-                if(whitesTurn){
+                if(whitesTurn && currentPiece.getColumn() == columnItGoesTo ){
                     if(board[6 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
                     return false;
                     }
                 }
                 //else it is black's turn and if there is a piece in front of a black piece, return false
-                else{
+                if(!whitesTurn && currentPiece.getColumn() == columnItGoesTo){
                     if(board[8 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
                     return false;
                     }
                 }
+                
+
 
              
                 // If the piece has not moved, it cannot move more than two spots or diagonal 
@@ -375,10 +364,9 @@ public:
                             catch(out_of_range){
                                 return false;
                             }
+                        }
                     }
-                
-                }
-            return true;
+                return true;
             }  
             //queens
             if(currentPiece.getPiece() == QUEEN){ //TODO
@@ -463,11 +451,9 @@ public:
                             catch(out_of_range){
                                 return false;
                             }
+                        }           
                     }
-                
-                }
-            return true;
-            
+                return true;   
             }       
             //knights 
             if(currentPiece.getPiece() == KNIGHT){ 
@@ -483,24 +469,41 @@ public:
             }
             //kings
             if(currentPiece.getPiece() ==  KING){ 
+                
                 if(abs(currentPiece.getRow() - rowItGoesTo) <= 1 &&
-                   abs(currentPiece.getColumn() - columnItGoesTo <= 1))
+                   abs(currentPiece.getColumn() - columnItGoesTo) <= 1)
                    {
                         return true;
                    }
-                else if(false /* attempts castle */){
-
-                }
+                //castles
+                else if(abs(currentPiece.getRow() - rowItGoesTo) == 0 && // row doesnt change
+                        abs(currentPiece.getColumn() - columnItGoesTo) == 2 && // attempts to move 2
+                        !currentPiece.has_moved) // king hasnt moved
+                        { 
+                        // king attempts to move towards h rook (kingSide)
+                        if(columnItGoesTo > currentPiece.getColumn()){
+                            if(board[7 - currentPiece.getRow()][6].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][5].getPiece() == BLANK &&
+                               !board[7 - currentPiece.getRow()][7].has_moved){
+                                movePiece(7,rowItGoesTo,5,rowItGoesTo);
+                                return true;
+                            }
+                        }
+                        // king attempts to move towards a rook (queenSide)
+                         if(columnItGoesTo < currentPiece.getColumn()){
+                            if(board[7 - currentPiece.getRow()][1].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][2].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][3].getPiece() == BLANK &&
+                               !board[7 - currentPiece.getRow()][0].has_moved){
+                                movePiece(0,rowItGoesTo,3,rowItGoesTo);
+                                return true;
+                            }
+                        }
+                    }
                 return false;
-
             }
-            if(currentPiece.getPiece() == PAWN){
-
-                return true;       
-            }
-
         abort();  
-        }
+    }
 
     // these two are mostly for testing
     void incMoveCount() {
