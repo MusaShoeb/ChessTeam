@@ -7,6 +7,13 @@ class gameManager {
 private:
     bool whitesTurn = true;
     int moveCount = 0;
+
+    //To help with check + checkmate
+    int blackKingRow = 7;
+    int blackKingCol = 4;
+    int whiteKingCol= 0;
+    int whiteKingRow = 4;
+
     Pieces board[8][8] = {
             Pieces(BLACK, 1, ROOK, 7, 0), Pieces(BLACK, 0, KNIGHT, 7, 1),   Pieces(BLACK, 0, BISHOP, 7, 2), Pieces(BLACK, 0, QUEEN, 7, 3),  Pieces(BLACK, 0, KING, 7, 4),   Pieces(BLACK, 0, BISHOP, 7, 5), Pieces(BLACK, 0, KNIGHT, 7, 6), Pieces(BLACK, 2, ROOK, 7, 7),
             Pieces(BLACK, 0, PAWN, 6, 0), Pieces(BLACK, 0, PAWN,   6, 1),   Pieces(BLACK, 0, PAWN,   6, 2), Pieces(BLACK, 0, PAWN,  6, 3),  Pieces(BLACK, 0, PAWN, 6, 4),   Pieces(BLACK, 0, PAWN,   6, 5), Pieces(BLACK, 0, PAWN,   6, 6), Pieces(BLACK, 0, PAWN, 6, 7),
@@ -164,9 +171,60 @@ public:
             */
         }
     
-    bool isCheck(){
+    bool isCheck(color kingColor){
 
-        return false;
+        int searchRow;
+        int searchCol;
+
+        int originRow;
+        int originCol;
+
+        if (kingColor == WHITE) {
+             searchCol, originCol = whiteKingCol;
+             searchRow, originRow = whiteKingRow;
+
+        }
+        
+        if (kingColor == BLACK) {
+             searchCol = blackKingCol;
+             searchRow = blackKingRow;
+        }
+        //For all 8 directions
+        struct Direction {
+            int ypos;
+            int xpos;
+
+            Direction (int x, int y) : ypos(y), xpos(x) {}
+
+        };
+
+        Direction directions[] = {
+            Direction(1, 0),   // Right
+            Direction(1, 1),   // Right-Up
+            Direction(0, 1),   // Up
+            Direction(-1, 1),  // Left-Up
+            Direction(-1, 0),  // Left
+            Direction(-1, -1), // Left-Down
+            Direction(0, -1),  // Down
+            Direction(1, -1)
+        };
+        
+        for (const auto& dir : directions) {
+            while ((searchRow + dir.ypos >= 0 && searchRow + dir.ypos < 8) && (searchCol + dir.xpos >= 0 && searchCol + dir.xpos < 8)) {
+                 searchCol += dir.xpos;
+                 searchRow += dir.ypos;
+
+                 if(board[searchRow][searchCol].getColor() != board[originRow][originCol].getColor()) {
+                     if(check_available(searchRow,searchCol,blackKingRow,blackKingCol))
+                        return true;
+                 }
+            }
+       
+
+        
+       
+    }
+     return false;
     }
 
     bool isCheckmate() {
