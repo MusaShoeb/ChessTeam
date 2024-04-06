@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 using namespace std;
 
 class gameManager {
@@ -9,10 +10,9 @@ private:
     int moveCount = 0;
 
     //To help with check + checkmate
-    int blackKingRow = 7;
-    int blackKingCol = 4;
-    int whiteKingCol= 0;
-    int whiteKingRow = 4;
+    int blackKingRow = 7, blackKingCol = 4, whiteKingCol = 0, whiteKingRow = 4;
+    vector<Pieces*>availableWhite;
+    vector<Pieces*>availableBlack;
 
     Pieces board[8][8] = {
             Pieces(BLACK, 1, ROOK, 7, 0), Pieces(BLACK, 0, KNIGHT, 7, 1),   Pieces(BLACK, 0, BISHOP, 7, 2), Pieces(BLACK, 0, QUEEN, 7, 3),  Pieces(BLACK, 0, KING, 7, 4),   Pieces(BLACK, 0, BISHOP, 7, 5), Pieces(BLACK, 0, KNIGHT, 7, 6), Pieces(BLACK, 2, ROOK, 7, 7),
@@ -171,17 +171,16 @@ public:
             */
         }
     
-    bool isCheck(color kingColor){
+    bool isCheck(color kingColor, Pieces board[8][8]){
 
-        int searchRow;
-        int searchCol;
-
-        int originRow;
-        int originCol;
+        int searchRow, originRow;
+        int searchCol, originCol;
 
         if (kingColor == WHITE) {
-             searchCol, originCol = whiteKingCol;
-             searchRow, originRow = whiteKingRow;
+             searchCol = whiteKingCol;
+             originCol = whiteKingCol;
+             searchRow = whiteKingRow;
+             originRow = whiteKingRow;
 
         }
         
@@ -227,14 +226,58 @@ public:
      return false;
     }
 
-    bool isCheckmate() {
+    bool isCheckmate(color KingColor) {
 
-        return false;
+        if (isCheck(KingColor, board)) {
+            availablePieces();
+
+            for (Pieces* piece : availableWhite) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        if (check_available(piece->getRow(),piece->getColumn(),board[i][j].getRow(),board[i][j].getColumn())) {
+                            Pieces newBoard [8][8];
+                            for (int i = 0; i < 8; i++) {
+                            for (int j = 0; j < 8; j++) {
+                                newBoard[i][j] = board[i][j];
+                            }
+                        }
+                        movePiece(piece->getColumn(),piece->getRow(),newBoard[i][j].getColumn(),newBoard[i][j].getRow());
+                        if(!isCheck(WHITE,newBoard))
+                            return false;
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
   
     bool isStalemate() {
 
         return false;
+    }
+
+    void availablePieces() {
+        
+        
+        availableBlack.clear();
+        availableWhite.clear();
+
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j].getColor() == WHITE) {
+                    availableWhite.push_back(&board[i][j]);
+                }
+                else if (board[i][j].getColor() == BLACK) {
+                    availableBlack.push_back(&board[i][j]);
+                }
+            }
+        }
+
+
     }
 
     bool check_available(int rowPieceThatsMoving, int columnPieceThatsMoving, int rowItGoesTo, int columnItGoesTo){
