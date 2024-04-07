@@ -18,7 +18,7 @@ int main() {
 
 	do{
 		game.printBoard();
-		gameManager TEMP(game);
+		game.printBoardTEST();
 		getInputs(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo, game.isItWhitesTurn());
 
 		// move pieces that the user wants 
