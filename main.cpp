@@ -42,7 +42,7 @@ int main() {
 		}
 			
 		// this is a temp game loop 
-	}while(!game.isCheckmate(WHITE) && !game.isCheckmate(BLACK) && !game.isStalemate());
+	}while(game.getMoveCount() != 10);
 
 	return 0;
 };

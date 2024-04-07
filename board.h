@@ -331,14 +331,33 @@ public:
             //Pawns
             if(currentPiece.getPiece() == PAWN){
                 
+
+                // If the piece has not moved, it cannot move more than two spots or diagonal 
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                       if(rowItGoesTo > currentPiece.getRow() + 2 &&  board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }    
+                    }
+                    else if(whitesTurn == false){
+                        if(rowItGoesTo < currentPiece.getRow() - 2 && board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }  
+                    }
+                    else{
+
+                    }
+                    
+                }
+                
                 // return false if they want to move the pawn left and right
                 //this also let the pawn to take piece diagonally from them
                 if(columnItGoesTo != columnPieceThatsMoving && board[7 - rowItGoesTo][columnItGoesTo].getPiece() == BLANK){
                     return false;
                 }
 
-                
-                
                 // If it is white's turn and there is a piece in front of the pawn, return false 
                 if(whitesTurn && currentPiece.getColumn() == columnItGoesTo ){
                     if(board[6 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
@@ -346,48 +365,12 @@ public:
                     }
                 }
                 //else it is black's turn and if there is a piece in front of a black piece, return false
-                if(!whitesTurn && currentPiece.getColumn() == columnItGoesTo){
+                if(whitesTurn == false && currentPiece.getColumn() == columnItGoesTo){
                     if(board[8 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
                     return false;
                     }
                 }
                 
-
-
-             
-                // If the piece has not moved, it cannot move more than two spots or diagonal 
-                if(currentPiece.has_moved == false){
-                    if(whitesTurn){
-                       if(rowItGoesTo > currentPiece.getRow() + 2 || columnItGoesTo != columnPieceThatsMoving)
-                        {
-                            return false;
-                        }    
-                    }
-                    else{
-                        if(rowItGoesTo < currentPiece.getRow() - 2 || columnItGoesTo != columnPieceThatsMoving)
-                        {
-                            return false;
-                        }  
-                    }
-                    
-                }
-
-                // implement a check if the piece hasn't moved and they cannot take a piece in the second spot.
-                // if there is a piece at the second spot and the piece that wants to move has not moved, return false
-                if(currentPiece.has_moved == false){
-                    if(whitesTurn){
-                        if(board[5 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
-                        return false;
-                        }
-                    }   
-                //else it is black's turn and if there is a piece in front of a black piece, return false
-                    else{
-                        if(board[9 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
-                        return false;
-                        }
-                }
-                }
-
                 // If the piece has moved, it cannot move more than two spots 
                 if(currentPiece.has_moved){
                     if(whitesTurn){
@@ -396,7 +379,7 @@ public:
                             return false;
                         }    
                     }
-                    else{
+                    else if(whitesTurn == false){
                         if(rowItGoesTo <= rowPieceThatsMoving - 2)
                         {
                             return false;
