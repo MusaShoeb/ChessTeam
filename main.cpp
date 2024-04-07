@@ -12,17 +12,13 @@ int main() {
 	int intColumnOfPieceToMove = -1;
 	int rowOfPieceToGoTo = -1;
 	int intColumnOfPieceToGoTo = -1;
-	bool _1;
-	bool _2;
 	
-
 	do{
 		game.printBoard();
 		getInputs(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo, game.isItWhitesTurn());
 
 		// move pieces that the user wants 
 		if(game.check_available(rowOfPieceToMove, intColumnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
-
 			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
 			game.incMoveCount();
 			game.changeTurn();
