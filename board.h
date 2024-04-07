@@ -233,32 +233,51 @@ public:
             //Pawns
             if(currentPiece.getPiece() == PAWN){
                 
-
                 // If the piece has not moved, it cannot move more than two spots or diagonal 
                 if(currentPiece.has_moved == false){
                     if(whitesTurn){
-                       if(rowItGoesTo > currentPiece.getRow() + 2 &&  board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                       if(rowItGoesTo > currentPiece.getRow() + 2)
                         {
                             return false;
                         }    
                     }
                     else if(whitesTurn == false){
-                        if(rowItGoesTo < currentPiece.getRow() - 2 && board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        if(rowItGoesTo < currentPiece.getRow() - 2)
                         {
                             return false;
                         }  
                     }
-                    else{
+                }
 
+                // If the piece has not moved, it cannot move more than two spots or diagonal 
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                       if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }    
                     }
-                    
+                    else if(whitesTurn == false){
+                        if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }  
+                    }
+                }
+
+                // checks if the desired spot is the spot behind the current piece
+                if(whitesTurn){
+                    if(rowItGoesTo < currentPiece.getRow()){
+                    return false;
+                    }
+                }
+                else if (whitesTurn == false){
+                    if(rowItGoesTo > currentPiece.getRow()){
+                    return false;
+                    }
                 }
                 
-                // return false if they want to move the pawn left and right
-                //this also let the pawn to take piece diagonally from them
-                if(columnItGoesTo != columnPieceThatsMoving && board[7 - rowItGoesTo][columnItGoesTo].getPiece() == BLANK){
-                    return false;
-                }
+                
 
                 // If it is white's turn and there is a piece in front of the pawn, return false 
                 if(whitesTurn && currentPiece.getColumn() == columnItGoesTo ){
@@ -289,6 +308,31 @@ public:
                     }
                     
                 }
+
+                if(whitesTurn){
+                       if(rowItGoesTo == rowPieceThatsMoving + 1 && columnItGoesTo == columnPieceThatsMoving + 1)
+                        {
+                            return true;
+                        }
+                        else if(rowItGoesTo == rowPieceThatsMoving + 1 && columnItGoesTo == columnPieceThatsMoving -1){
+                            return true;
+                        } 
+                    }
+                    else if(whitesTurn == false){
+                        if(rowItGoesTo == rowPieceThatsMoving - 1 && columnItGoesTo == columnPieceThatsMoving - 1)
+                        {
+                            return true;
+                        }
+                        else if(rowItGoesTo == rowPieceThatsMoving - 1 && columnItGoesTo == columnPieceThatsMoving + 1){
+                            return true;
+                        }  
+                    }
+                
+                // return false if they want to move the pawn left and right
+                if(columnItGoesTo != columnPieceThatsMoving){
+                    return false;
+                }
+                
                 return true;
             }
 
