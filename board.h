@@ -31,6 +31,15 @@ public:
         
     }
 
+    //copy constructor
+    gameManager(gameManager& other){
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <= 7; j++){
+                board[i][j] = other.board[i][j];
+            }
+        }
+    }
+
     bool isItWhitesTurn() {                 // not yet operated // 
         return whitesTurn;
     }
@@ -142,147 +151,36 @@ public:
     
     bool isCheck(color kingColor){
 
-        int searchRow, originRow;   // Used to track the position of the king and the search 
-        int searchCol, originCol;   
-
-        if (kingColor == WHITE) {
-             searchCol = whiteKingCol;     
-             originCol = whiteKingCol;
-             searchRow = whiteKingRow;
-             originRow = whiteKingRow;
-
-        }
+        //find king 
+        int columnKingIsOn = -1;
+        int rowKingIsOn = -1;
         
-        if (kingColor == BLACK) {
-             searchCol = blackKingCol;
-             originCol = blackKingCol;
-             searchRow = blackKingRow;
-             originRow = blackKingRow;
-
-        }
-        //For all 8 directions
-        struct Direction {
-            int ypos;
-            int xpos;
-
-            Direction (int x, int y) : ypos(y), xpos(x) {}
-
-        };
-
-        Direction directions[] = {
-            Direction(1, 0),   // Right
-            Direction(1, 1),   // Right-Up
-            Direction(0, 1),   // Up
-            Direction(-1, 1),  // Left-Up
-            Direction(-1, 0),  // Left
-            Direction(-1, -1), // Left-Down
-            Direction(0, -1),  // Down
-            Direction(1, -1)
-        };
-        
-        /* For each of the 8-directions in which a King can be put in check, we search that
-        direction and record any pieces we come across. If any of those pieces are able to reach
-        the king's spot, he is in danger*/
-
-        for (const auto& dir : directions) {
-            while ((searchRow + dir.ypos >= 0 && searchRow + dir.ypos < 8) && (searchCol + dir.xpos >= 0 && searchCol + dir.xpos < 8)) {
-                 searchCol += dir.xpos;
-                 searchRow += dir.ypos;
-
-                    if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
-                        return true;
-                    
+        //Finding Kings
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <=7; j++){
+                if(board[7 - i][j].getPiece() == KING &&
+                   board[7 - i][j].getColor() == kingColor){
+                    columnKingIsOn = board[7 - i][j].getColumn();
+                    rowKingIsOn = board[7 - i][j].getRow();
                 }
             }
-        return false;
-    }
-
-    bool isCheck(color kingColor, Pieces board[8][8]){
-
-        int searchRow, originRow;   // Used to track the position of the king and the search 
-        int searchCol, originCol;   
-
-        if (kingColor == WHITE) {
-             searchCol = whiteKingCol;     
-             originCol = whiteKingCol;
-             searchRow = whiteKingRow;
-             originRow = whiteKingRow;
-
         }
-        
-        if (kingColor == BLACK) {
-             searchCol = blackKingCol;
-             originCol = blackKingCol;
-             searchRow = blackKingRow;
-             originRow = blackKingRow;
 
-        }
-        //For all 8 directions
-        struct Direction {
-            int ypos;
-            int xpos;
-
-            Direction (int x, int y) : ypos(y), xpos(x) {}
-
-        };
-
-        Direction directions[] = {
-            Direction(1, 0),   // Right
-            Direction(1, 1),   // Right-Up
-            Direction(0, 1),   // Up
-            Direction(-1, 1),  // Left-Up
-            Direction(-1, 0),  // Left
-            Direction(-1, -1), // Left-Down
-            Direction(0, -1),  // Down
-            Direction(1, -1)
-        };
-        
-        /* For each of the 8-directions in which a King can be put in check, we search that
-        direction and record any pieces we come across. If any of those pieces are able to reach
-        the king's spot, he is in danger*/
-
-        for (const auto& dir : directions) {
-            while ((searchRow + dir.ypos >= 0 && searchRow + dir.ypos < 8) && 
-                   (searchCol + dir.xpos >= 0 && searchCol + dir.xpos < 8)) {
-                 searchCol += dir.xpos;
-                 searchRow += dir.ypos;
-
-                    if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
-                        return true;
-                    
+        //row = i = 6
+        //column = j = 5
+        //check all spaces
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <=7; j++){
+                if(check_available(i, j, rowKingIsOn, columnKingIsOn)){
+                    return true;
                 }
             }
+        }
         return false;
     }
 
     bool isCheckmate(color KingColor) {
-
-        /*This function takes the available pieces on a chessboard, and simulates all possible moves
-         for each of them. If no move on any piece removes the check, we can verify that it is checkmate 
-        */
-        if (isCheck(KingColor, board)) {  //Make sure there's a potential for checkmate
-            availablePieces();  //Returns the available pieces on the board
-
-            for (Pieces* piece : availableWhite) { //Creates a temporary board to run a simulated move
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        if (check_available(piece->getRow(),piece->getColumn(),board[i][j].getRow(),board[i][j].getColumn())) {
-                            Pieces newBoard [8][8];
-                            for (int i = 0; i < 8; i++) {
-                            for (int j = 0; j < 8; j++) {
-                                newBoard[i][j] = board[i][j];
-                            }
-                        }
-                        movePiece(piece->getColumn(),piece->getRow(),newBoard[i][j].getColumn(),newBoard[i][j].getRow());
-                        if(!isCheck(WHITE,newBoard)) //Checks if the move was able to get rid of the check
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-    abort;
+        return false;
     }
   
     bool isStalemate() {
@@ -305,8 +203,6 @@ public:
                 }
             }
         }
-
-
     }
 
     bool check_available(int rowPieceThatsMoving, int columnPieceThatsMoving, int rowItGoesTo, int columnItGoesTo){
@@ -449,7 +345,8 @@ public:
                 int x_spaces = currentPiece.getColumn() - desired_x_space;
                 int y_spaces = currentPiece.getRow() - desired_y_space;
 
-                if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
+                if(abs(x_spaces) == abs(y_spaces)){
+                //CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
                 //we need to increment the x coord and the y coord at the same time so that it why initizalied both the i and the j
                 // we are checking the desired row is less than or greater than the row we are currently on and same goes for the column                       
                     for(int i = currentPiece.getRow(), j = currentPiece.getColumn(); i < desired_x_space ? (i < x_spaces):(i > x_spaces),
@@ -477,16 +374,19 @@ public:
                             catch(out_of_range){
                                 return false;
                             }
-                        }
                     }
+                }
+                else{
+                    return false;
+                }
                 return true;
             }  
             //queens
             if(currentPiece.getPiece() == QUEEN){ //TODO
                 int desired_x_space = columnItGoesTo;
                 int desired_y_space = rowItGoesTo;
-                int x_spaces = currentPiece.getColumn() - desired_x_space;
-                int y_spaces = currentPiece.getRow() - desired_y_space;
+                int x_spaces = currentPiece.getColumn() - columnItGoesTo;
+                int y_spaces = currentPiece.getRow() - rowItGoesTo;
 
                 //checks for diagonal, if not diagional, go to rook part
                 if(!(currentPiece.getColumn() - columnItGoesTo != 0 &&
@@ -563,6 +463,12 @@ public:
                             }
                         }           
                     }
+                    /*
+                    else{
+                        return false;
+                    }
+                    */
+                   
                 return true;   
             }       
             //knights 
