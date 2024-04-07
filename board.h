@@ -249,7 +249,7 @@ public:
                     }
                 }
 
-                // If the piece has not moved, it cannot move more than two spots or diagonal 
+                // If the piece has not moved, it cannot move two spots if there is a piece there
                 if(currentPiece.has_moved == false){
                     if(whitesTurn){
                        if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
@@ -309,6 +309,7 @@ public:
                     
                 }
 
+                // allows diagonally takes
                 if(whitesTurn){
                        if(rowItGoesTo == rowPieceThatsMoving + 1 && columnItGoesTo == columnPieceThatsMoving + 1)
                         {
@@ -332,7 +333,7 @@ public:
                 if(columnItGoesTo != columnPieceThatsMoving){
                     return false;
                 }
-                
+
                 return true;
             }
 
