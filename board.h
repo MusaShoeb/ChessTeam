@@ -96,23 +96,12 @@ public:
             for (int j = 0; j < 8; j++) {
                 Pieces piecetype = board[i][j];  // adding coordinates later today 
                 color colortype = board[i][j].getColor();
-
                 cout << piecetype.getColumn() << piecetype.getRow() << '|';
-
-              
             }
             cout << endl;
             cout << "-------------------------";
             cout << endl;
         }
-    }
-
-        /// <summary>
-        /// ///////////dany edit above naming peices others for alternative, below movement of peice from a certian positon - who ever doing movement let me see what u got planned please :
-        /// </summary>
-
-    void coordbypeicenum(int piece_number) {
-
     }
 
     void movePiece(int intColumnOfPieceToMove, int rowOfPieceToMove, int intColumnOfPieceToGoTo, int rowOfPieceToGoTo){
@@ -145,33 +134,13 @@ public:
         else{
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setColor(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getColor());
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setPiece(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getPiece());
-            
-
             board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setColor(tempObj.getColor());  
             board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setPiece(tempObj.getPiece());  
-
             board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
-        
     }
-
-
-        // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
-    void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
-            //more methods in here? one for each piece?
-            /*
-            
-            if(check_available()){
-                Pieces tempBlank(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
-                board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
-                board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
-                changeTurn();
-            }
-
-            */
-        }
     
-    bool isCheck(color kingColor, Pieces board[8][8]){
+    bool isCheck(color kingColor){
 
         int searchRow, originRow;   // Used to track the position of the king and the search 
         int searchCol, originCol;   
@@ -220,17 +189,70 @@ public:
                  searchCol += dir.xpos;
                  searchRow += dir.ypos;
 
-                 if(board[searchRow][searchCol].getColor() != board[originRow][originCol].getColor()) { //Makes sure the piece is an opponent
-                     if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
+                    if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
                         return true;
-                 }
+                    
+                }
             }
-       
-
-        
-       
+        return false;
     }
-     return false;
+
+    bool isCheck(color kingColor, Pieces board[8][8]){
+
+        int searchRow, originRow;   // Used to track the position of the king and the search 
+        int searchCol, originCol;   
+
+        if (kingColor == WHITE) {
+             searchCol = whiteKingCol;     
+             originCol = whiteKingCol;
+             searchRow = whiteKingRow;
+             originRow = whiteKingRow;
+
+        }
+        
+        if (kingColor == BLACK) {
+             searchCol = blackKingCol;
+             originCol = blackKingCol;
+             searchRow = blackKingRow;
+             originRow = blackKingRow;
+
+        }
+        //For all 8 directions
+        struct Direction {
+            int ypos;
+            int xpos;
+
+            Direction (int x, int y) : ypos(y), xpos(x) {}
+
+        };
+
+        Direction directions[] = {
+            Direction(1, 0),   // Right
+            Direction(1, 1),   // Right-Up
+            Direction(0, 1),   // Up
+            Direction(-1, 1),  // Left-Up
+            Direction(-1, 0),  // Left
+            Direction(-1, -1), // Left-Down
+            Direction(0, -1),  // Down
+            Direction(1, -1)
+        };
+        
+        /* For each of the 8-directions in which a King can be put in check, we search that
+        direction and record any pieces we come across. If any of those pieces are able to reach
+        the king's spot, he is in danger*/
+
+        for (const auto& dir : directions) {
+            while ((searchRow + dir.ypos >= 0 && searchRow + dir.ypos < 8) && 
+                   (searchCol + dir.xpos >= 0 && searchCol + dir.xpos < 8)) {
+                 searchCol += dir.xpos;
+                 searchRow += dir.ypos;
+
+                    if(check_available(searchRow,searchCol,blackKingRow,blackKingCol)) //Makes Sure the piece can reach the King
+                        return true;
+                    
+                }
+            }
+        return false;
     }
 
     bool isCheckmate(color KingColor) {
@@ -254,15 +276,13 @@ public:
                         movePiece(piece->getColumn(),piece->getRow(),newBoard[i][j].getColumn(),newBoard[i][j].getRow());
                         if(!isCheck(WHITE,newBoard)) //Checks if the move was able to get rid of the check
                             return false;
-
-
                         }
                     }
                 }
             }
+            return true;
         }
-
-        return true;
+    abort;
     }
   
     bool isStalemate() {
@@ -271,7 +291,6 @@ public:
     }
 
     void availablePieces() {
-        
         
         availableBlack.clear();
         availableWhite.clear();
@@ -486,52 +505,49 @@ public:
                 int x_spaces = currentPiece.getColumn() - desired_x_space;
                 int y_spaces = currentPiece.getRow() - desired_y_space;
 
-                //THE ROOK PART OF THE QUEEN slay pur pur
-                //if rows are changing and columns are not 
-                                //checks for diagonal
-                if(currentPiece.getColumn() - columnItGoesTo != 0 &&
-                   currentPiece.getRow() - rowItGoesTo != 0){
-                    return false;
-                }
+                //checks for diagonal, if not diagional, go to rook part
+                if(!(currentPiece.getColumn() - columnItGoesTo != 0 &&
+                     currentPiece.getRow() - rowItGoesTo != 0)){
 
-                //if rows are changing and columns are not 
-                if(currentPiece.getColumn() - columnItGoesTo == 0){
-                    if(currentPiece.getRow() < rowItGoesTo){
-                        for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
-                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
-                                return false;
-                        }
-                    }                    
-                }
-                //if rows are changing and columns are not
-                //other direction
-                if(currentPiece.getColumn() - columnItGoesTo == 0){
-                    if(currentPiece.getRow() > rowItGoesTo){
-                        for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
-                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
-                                return false;
+                    //if rows are changing and columns are not 
+                    if(currentPiece.getColumn() - columnItGoesTo == 0){
+                        if(currentPiece.getRow() < rowItGoesTo){
+                            for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                                if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                    return false;
+                            }
+                        }                    
+                    }
+                    //if rows are changing and columns are not
+                    //other direction
+                    if(currentPiece.getColumn() - columnItGoesTo == 0){
+                        if(currentPiece.getRow() > rowItGoesTo){
+                            for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
+                                if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                    return false;
+                            }
                         }
                     }
-                }
-                //if columns are changing and rows are not 
-                if(currentPiece.getRow() - rowItGoesTo == 0){
-                    if(currentPiece.getColumn() < columnItGoesTo){
-                        for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
-                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
-                                return false;
-                        }
-                    }   
-                }
-                //other direction
-                if(currentPiece.getRow() - rowItGoesTo == 0){
-                    if(currentPiece.getColumn() > columnItGoesTo){
-                        for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
-                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
-                                return false;
+                    //if columns are changing and rows are not 
+                    if(currentPiece.getRow() - rowItGoesTo == 0){
+                        if(currentPiece.getColumn() < columnItGoesTo){
+                            for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                                if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                    return false;
+                            }
+                        }   
+                    }
+                    //other direction
+                    if(currentPiece.getRow() - rowItGoesTo == 0){
+                        if(currentPiece.getColumn() > columnItGoesTo){
+                            for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                                if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                    return false;
+                            }
                         }
                     }
-                }
-                return true;
+                    return true;
+                }                
 
                 //the bishop part of the queen
                 if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY

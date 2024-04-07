@@ -8,6 +8,7 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 int main() {
 	
 	gameManager game;
+	gameManager TEMP;
 	int rowOfPieceToMove = -1;
 	int intColumnOfPieceToMove = -1;
 	int rowOfPieceToGoTo = -1;
@@ -15,19 +16,34 @@ int main() {
 
 	do{
 		game.printBoard();
-
+		TEMP = game;
 		getInputs(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo, game.isItWhitesTurn());
 
 		// move pieces that the user wants 
 		if(game.check_available(rowOfPieceToMove, intColumnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
+
+			TEMP.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
+			if(TEMP.isCheck(WHITE) && TEMP.isItWhitesTurn()){ // does white put themselves in check on their move
+				continue;
+			}
+			if(TEMP.isCheck(BLACK) && !TEMP.isItWhitesTurn()){ // does black put themselves in check on their move
+				continue;
+			}
+			if(game.isCheck(WHITE) && TEMP.isCheck(WHITE)){ // does white resolve their check
+				continue;
+			}
+			if(game.isCheck(BLACK) && TEMP.isCheck(BLACK)){ // does black resolve their check
+				continue;
+			}
+
 			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
 			game.incMoveCount();
 			game.changeTurn();
 		}
 			
 		// this is a temp game loop 
-	}while(game.getMoveCount() != 10);
-	cout << endl << "***hit turn limit***" << endl;
+	}while(!game.isCheckmate(WHITE) && !game.isCheckmate(BLACK) && !game.isStalemate());
+
 	return 0;
 };
 
