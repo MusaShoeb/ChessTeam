@@ -40,11 +40,17 @@ int main() {
 void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColumnOfPieceToGoTo, int& rowOfPieceToGoTo, bool whitesTurn){
 	char columnOfPieceToMove = ' ';
 	char columnOfPieceToGoTo = ' ';
+	string initalInput = "";
 
 		if(whitesTurn){
+
 			do{
 				cout << "column of the piece white wants to move: ";
-				cin >> columnOfPieceToMove;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				columnOfPieceToMove = initalInput.at(0);
 				columnOfPieceToMove = tolower(columnOfPieceToMove);
 				columnOfPieceToMove = columnOfPieceToMove - 97;
 				intColumnOfPieceToMove = columnOfPieceToMove;
@@ -52,13 +58,21 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 
 			do{
 				cout << "row of the piece white wants to move: ";
-				cin >> rowOfPieceToMove;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				rowOfPieceToMove = initalInput.at(0) - '0';
 				rowOfPieceToMove = rowOfPieceToMove - 1;
 			}while(!(rowOfPieceToMove >= 0 && rowOfPieceToMove <=7));
 
 			do{
 				cout << "column of the piece white wants to go to: ";
-				cin >> columnOfPieceToGoTo;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				columnOfPieceToGoTo = initalInput.at(0);
 				columnOfPieceToGoTo = tolower(columnOfPieceToGoTo);
 				columnOfPieceToGoTo = columnOfPieceToGoTo - 97;
 				intColumnOfPieceToGoTo = columnOfPieceToGoTo;
@@ -66,7 +80,11 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 
 			do{
 				cout << "row of the piece white wants to go to: ";
-				cin >> rowOfPieceToGoTo;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				rowOfPieceToGoTo = initalInput.at(0) - '0';
 				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
 
@@ -75,7 +93,11 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 		else{
 			do{
 				cout << "column of the piece black wants to move: ";
-				cin >> columnOfPieceToMove;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				columnOfPieceToMove = initalInput.at(0);
 				columnOfPieceToMove = tolower(columnOfPieceToMove);
 				columnOfPieceToMove = columnOfPieceToMove - 97;
 				intColumnOfPieceToMove = columnOfPieceToMove;
@@ -83,13 +105,21 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 
 			do{
 				cout << "row of the piece black wants to move: ";
-				cin >> rowOfPieceToMove;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				rowOfPieceToMove = initalInput.at(0) - '0';
 				rowOfPieceToMove = rowOfPieceToMove - 1;
 			}while(!(rowOfPieceToMove >= 0 && rowOfPieceToMove <=7));
 
 			do{
 				cout << "column of the piece black wants to go to: ";
-				cin >> columnOfPieceToGoTo;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				columnOfPieceToGoTo = initalInput.at(0);
 				columnOfPieceToGoTo = tolower(columnOfPieceToGoTo);
 				columnOfPieceToGoTo = columnOfPieceToGoTo - 97;
 				intColumnOfPieceToGoTo = columnOfPieceToGoTo;
@@ -97,8 +127,12 @@ void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColum
 
 			do{
 				cout << "row of the piece black wants to go to: ";
-				cin >> rowOfPieceToGoTo;
-				rowOfPieceToGoTo = rowOfPieceToGoTo - 1;
+				cin >> initalInput;
+				if(initalInput.length() > 1){
+					continue;
+				}
+				rowOfPieceToGoTo = initalInput.at(0) - '0';
+				rowOfPieceToGoTo= rowOfPieceToGoTo - 1;
 			}while(!(rowOfPieceToGoTo >= 0 && rowOfPieceToGoTo <=7));
 		}
 }
