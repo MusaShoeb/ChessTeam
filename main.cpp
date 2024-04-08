@@ -24,9 +24,16 @@ int main() {
 			game.changeTurn();
 		}
 			
-		// this is a temp game loop 
-	}while(!game.isCheckmate(WHITE) && !game.isCheckmate(BLACK) && !game.isStalemate());
+	}while(game.doesKingStillExist(WHITE) && game.doesKingStillExist(BLACK));
 
+	game.printBoard();
+
+	if(game.doesKingStillExist(WHITE)){
+		cout << endl << "WHITE HAS WON!!!" << endl;
+	}
+	if(game.doesKingStillExist(BLACK)){
+		cout << endl << "BLACK HAS WON!!!" << endl;
+	}
 	return 0;
 };
 

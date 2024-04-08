@@ -156,32 +156,6 @@ public:
     }
     
     bool isCheck(color kingColor){
-
-        //find king 
-        int columnKingIsOn = -1;
-        int rowKingIsOn = -1;
-        
-        //Finding Kings
-        for(int i = 0; i <= 7; i++){
-            for(int j = 0; j <=7; j++){
-                if(board[7 - i][j].getPiece() == KING &&
-                   board[7 - i][j].getColor() == kingColor){
-                    columnKingIsOn = board[7 - i][j].getColumn();
-                    rowKingIsOn = board[7 - i][j].getRow();
-                }
-            }
-        }
-
-        //row = i = 6
-        //column = j = 5
-        //check all spaces
-        for(int i = 0; i <= 7; i++){
-            for(int j = 0; j <=7; j++){
-                if(check_available(i, j, rowKingIsOn, columnKingIsOn)){
-                    return true;
-                }
-            }
-        }
         return false;
     }
 
@@ -190,7 +164,18 @@ public:
     }
   
     bool isStalemate() {
+        return false;
+    }
 
+    bool doesKingStillExist(color colour){
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <= 7; j++){
+                if(board[i][j].getPiece() == KING &&
+                   board[i][j].getColor() == colour){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -489,15 +474,11 @@ public:
                     return true;
                 }                
 
-                //bishops
-                if(currentPiece.getPiece() ==  BISHOP){
                 
-                    //checks for diagonal
-                    if(abs(currentPiece.getColumn() - columnItGoesTo) !=
-                       abs(currentPiece.getRow() - rowItGoesTo)){
-                        return false;
-                    }
-    
+                //checks for diagonal
+                if(abs(currentPiece.getColumn() - columnItGoesTo) ==
+                    abs(currentPiece.getRow() - rowItGoesTo)){
+                    
                     //going up right
                     if(columnItGoesTo > currentPiece.getColumn() &&
                        rowItGoesTo > currentPiece.getRow()){
@@ -537,6 +518,7 @@ public:
                     }
                     return true;
                 }
+                return false;
             }
             //knights 
             if(currentPiece.getPiece() == KNIGHT){ 
