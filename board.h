@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 using namespace std;
 
 class gameManager {
@@ -7,6 +8,12 @@ class gameManager {
 private:
     bool whitesTurn = true;
     int moveCount = 0;
+
+    //To help with check + checkmate
+    int blackKingRow = 7, blackKingCol = 4, whiteKingCol = 0, whiteKingRow = 4;
+    vector<Pieces*>availableWhite;
+    vector<Pieces*>availableBlack;
+
     Pieces board[8][8] = {
             Pieces(BLACK, 1, ROOK, 7, 0), Pieces(BLACK, 0, KNIGHT, 7, 1),   Pieces(BLACK, 0, BISHOP, 7, 2), Pieces(BLACK, 0, QUEEN, 7, 3),  Pieces(BLACK, 0, KING, 7, 4),   Pieces(BLACK, 0, BISHOP, 7, 5), Pieces(BLACK, 0, KNIGHT, 7, 6), Pieces(BLACK, 2, ROOK, 7, 7),
             Pieces(BLACK, 0, PAWN, 6, 0), Pieces(BLACK, 0, PAWN,   6, 1),   Pieces(BLACK, 0, PAWN,   6, 2), Pieces(BLACK, 0, PAWN,  6, 3),  Pieces(BLACK, 0, PAWN, 6, 4),   Pieces(BLACK, 0, PAWN,   6, 5), Pieces(BLACK, 0, PAWN,   6, 6), Pieces(BLACK, 0, PAWN, 6, 7),
@@ -24,6 +31,15 @@ public:
         
     }
 
+    //copy constructor
+    gameManager(gameManager& other){
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <= 7; j++){
+                board[i][j] = other.board[i][j];
+            }
+        }
+    }
+
     bool isItWhitesTurn() {                 // not yet operated // 
         return whitesTurn;
     }
@@ -33,10 +49,10 @@ public:
     }
 
     void printBoard() {
-        cout << "-------------------------";
+        cout << "  -------------------------";
         cout << endl;
         for (int i = 0; i < 8; i++) {
-            cout << '|';
+            cout << 7 - i + 1 << " |";
             for (int j = 0; j < 8; j++) {
                 piece piecetype = board[i][j].getPiece();  // adding coordinates later today 
                 color colortype = board[i][j].getColor();
@@ -73,17 +89,28 @@ public:
               
             }
             cout << endl;
+            cout << "  -------------------------";
+            cout << endl;
+        }
+        cout << "   a  b  c  d  e  f  g  h" << endl;
+    }
+
+    //This shows the values of the getRow and getColumn Function of the Pieces Value.
+    // AKA it shows where every piece "thinks" it is 
+    void printBoardTEST() {
+        cout << "-------------------------";
+        cout << endl;
+        for (int i = 0; i < 8; i++) {
+            cout << '|';
+            for (int j = 0; j < 8; j++) {
+                Pieces piecetype = board[i][j];  // adding coordinates later today 
+                color colortype = board[i][j].getColor();
+                cout << piecetype.getColumn() << piecetype.getRow() << '|';
+            }
+            cout << endl;
             cout << "-------------------------";
             cout << endl;
         }
-    }
-
-        /// <summary>
-        /// ///////////dany edit above naming peices others for alternative, below movement of peice from a certian positon - who ever doing movement let me see what u got planned please :
-        /// </summary>
-
-    void coordbypeicenum(int piece_number) {
-
     }
 
     void movePiece(int intColumnOfPieceToMove, int rowOfPieceToMove, int intColumnOfPieceToGoTo, int rowOfPieceToGoTo){
@@ -93,259 +120,476 @@ public:
 
         // the problem with this is that the row and column data inside the piece objects are not accurate.
 
-        Pieces tempObj = board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo];
+        Pieces tempObj;   
+        Pieces tempobj2;
+        tempobj2.setColor(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getColor());
+        tempobj2.setPiece(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getPiece());
+        tempObj.setColor(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor());
+        tempObj.setPiece(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getPiece());
         Pieces blankObj(NONE, 0, BLANK, 7 - rowOfPieceToMove, intColumnOfPieceToMove);
 
         //if it is white turn and the piece at the desired spot to move at is black, then replace the black piece with the white piece
         //then replace the spot the white piece was with a blank space.
         if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == BLACK && whitesTurn){
-            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
-            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setPiece(tempobj2.getPiece());
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setColor(tempobj2.getColor());
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setColor(NONE);
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setPiece(BLANK);
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         //vice versa
         else if(board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].getColor() == WHITE && !whitesTurn){
-            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
-            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = blankObj;
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setPiece(tempobj2.getPiece());
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setColor(tempobj2.getColor());
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setColor(NONE);
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setPiece(BLANK);
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
         //if the piece just moves to a blank space 
         else{
-            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo] = board[7 - rowOfPieceToMove][intColumnOfPieceToMove];
-            board[7 - rowOfPieceToMove][intColumnOfPieceToMove] = tempObj;  
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setColor(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getColor());
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].setPiece(board[7 - rowOfPieceToMove][intColumnOfPieceToMove].getPiece());
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setColor(tempObj.getColor());  
+            board[7 - rowOfPieceToMove][intColumnOfPieceToMove].setPiece(tempObj.getPiece());  
+            board[7 - rowOfPieceToGoTo][intColumnOfPieceToGoTo].has_moved = true;
         }
-        
-        
+    }
+    
+    bool isCheck(color kingColor){
+        return false;
     }
 
-        // do we want one string containing the move to be the argument (like now), or for the main to parse it, and pass row, column, piece, as arguments?
-    void attemptMove(int columnPieceThatsMoving, int rowPieceThatsMoving, int columnItGoesTo, int rowItGoesTo){
-            //more methods in here? one for each piece?
-            if(check_available()){
-                Pieces tempBlank(NONE, 0, BLANK, rowPieceThatsMoving, columnPieceThatsMoving);
-                board[columnItGoesTo][rowItGoesTo] = board[columnPieceThatsMoving][rowPieceThatsMoving];
-                board[columnPieceThatsMoving][rowPieceThatsMoving] = tempBlank;
-                changeTurn();
-            }
-             
-        }
-
-    bool isCheckmate() {
-
+    bool isCheckmate(color KingColor) {
         return false;
     }
   
     bool isStalemate() {
-
         return false;
+    }
 
-    bool check_available(Pieces& currentPiece, int desired_x_space, int desired_y_space){
-            int x_spaces = currentPiece.getRow() - desired_x_space;
-            int y_spaces = currentPiece.getColumn() - desired_y_space;
-            if(currentPiece.getPiece() ==  ROOK){
-                if((x_spaces != y_spaces) && ((x_spaces > 0) || (y_spaces > 0)))
-                for(int i = currentPiece.getRow();  (i < x_spaces); i += (x_spaces > 0)  ? 1:-1){
-                    try{
-                        if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                        }
-                        else{
-                            
-                            throw out_of_range("puss");
-                        }  
-                    }
-                    catch(out_of_range){
-                        return false;
-                    }
+    bool doesKingStillExist(color colour){
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <= 7; j++){
+                if(board[i][j].getPiece() == KING &&
+                   board[i][j].getColor() == colour){
+                    return true;
                 }
-                for(int i = currentPiece.getRow();  (i < y_spaces); i += (y_spaces > 0)  ? 1:-1){
-                    try{
-                        if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                        else{
-                            
-                            throw out_of_range("puss");
-                        }  
-                    }
-                    catch(out_of_range){
-                        return false;
-                    }
-                }
-            return true;
             }
-            if(currentPiece.getPiece() ==  BISHOP){
-                if(abs(x_spaces) == abs(y_spaces)){
-                    int i = currentPiece.getRow();
-                    int j = currentPiece.getRow();
-                for(; (i < x_spaces); i += (x_spaces > 0)  ? 1:-1){
-                    for(;  (j < y_spaces); j += (y_spaces > 0)  ? 1:-1){
-                        try{
-                            if(board[i][j].getColor() != currentPiece.getColor()){                                
-                                if(board[i][j].getColor() != NONE){
-                                    return true;
-                                }                            
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                        break;
-                    }
+        }
+        return false;
+    }
+
+    void availablePieces() {
+        
+        availableBlack.clear();
+        availableWhite.clear();
+
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j].getColor() == WHITE) {
+                    availableWhite.push_back(&board[i][j]);
                 }
-                
+                else if (board[i][j].getColor() == BLACK) {
+                    availableBlack.push_back(&board[i][j]);
                 }
-            return true;
-            } 
-            if(currentPiece.getPiece() == QUEEN){ //TODO
-                //THE ROOK PART OF THE QUEEN slay pur pur
-                if((x_spaces != y_spaces) && ((x_spaces > 0) || (y_spaces > 0))){
-                    //UNSURE IF WE NEED <= OR < WE NEED TO CHECK THE DESIRED SPACE THAT THE PIECE WANTS TO MOVE SO I THINK IT IS <= 
-                    //LETS SAY OUR DESIRED ROW IS 5 AND OUR PIECE IS ON 3 THAT WOULD MEAN i is less our desired_x_space 
-                    //so we will run this for loop until i is greater than desired_x_space 
-                    //x_spaces is = to the difference between our desired row and our current row so in this Example x_spaecs = 2
-                    //2 is greater than 0 so we will increase our current row by 1 moving us closer to our desired_x_space
-                    //Visa versa if in desired row is less than our current row
-                    for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){ 
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                    
-                    //Same thing as row explaination but with the word row swapped with column
-                    for(int i = currentPiece.getColumn();  i < desired_y_space ? (i < desired_y_space): i > desired_y_space; i += (y_spaces > 0)  ? 1:-1){                        
-                        try{
-                            //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                            if((board[i][currentPiece.getColumn()].getColor() != currentPiece.getColor())){
-                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
-                                if(board[i][currentPiece.getColumn()].getColor() != NONE){
-                                    return true;
-                                }
-                            }
-                            else{
-                                
-                                throw out_of_range("puss");
-                            }  
-                        }
-                        catch(out_of_range){
-                            return false;
-                        }
-                    }
-                }
-                //the bishop part of the queen
-                
-                if(abs(x_spaces) == abs(y_spaces)){//CHECK TO MAKE SURE THAT WE ARE MOVING DIAGONALLY
-                //we need to increment the x coord and the y coord at the same time so that it why initizalied both the i and the j
-                // we are checking the desired row is less than or greater than the row we are currently on and same goes for the column                       
-                    for(int i = currentPiece.getRow(), j = currentPiece.getColumn(); i < desired_x_space ? (i < x_spaces):(i > x_spaces),
-                                j < desired_y_space ? (j < desired_y_space):(j > desired_y_space); i += (x_spaces > 0)  ? 1:-1, j += (y_spaces > 0)  ? 1:-1){ //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
-                        //CONDITIONAL FOR LOOP IDK HOW IT FULLY WORKS TBH
-                            try{
-                                //WE WE CAN MOVE TO A SPACE IF OUR COLOR DOES MATCH THE PIECE THAT IS ON THE SPACE.
-                                //IF NOTHING IS THERE WE CAN JUST MOVE THEIR IF IT IS THE OPPOSING COLOR THAT MEANS WE CAN ATTACK
-                                if(board[i][j].getColor() != currentPiece.getColor()){                                
-                                    if(board[i][j].getColor() != NONE){
-                                        //THIS MEANS THAT WE ARE ATTACKING ADD IN THE ATTACKING CODE HERE
-                                        return true; //TEMP
-                                    }
-                                    else{
-                                        //THIS MEANS THE SPACE WE WANT TO MOVE TO HAS NO PIECE ON IT. IT IS VALID TO MOVE THERE
-                                        
-                                    }                            
-                                }
-                                //WE ENTER THIS IF WE FIND OUT THAT THERE IS A PIECE IN THE PATH OF WHERE WE WANT TO MOVE 
-                                else{
-                                    
-                                    throw out_of_range("puss");
-                                }  
-                            }
-                            catch(out_of_range){
-                                return false;
-                            }
-                    }
-                
-                }
-            return true;
+            }
+        }
+    }
+
+    bool check_available(int rowPieceThatsMoving, int columnPieceThatsMoving, int rowItGoesTo, int columnItGoesTo){
+            Pieces& currentPiece = board[7 - rowPieceThatsMoving][columnPieceThatsMoving];
+            // if the piece being moved is empty
+            if(currentPiece.getPiece() == BLANK){
+                return false;
+            }
+            //if the piece being moved is not that players turn
+            if(currentPiece.getColor() == WHITE && !whitesTurn){
+                return false;
+            }
+            if(currentPiece.getColor() == BLACK && whitesTurn){
+                return false;
+            }
+            //if the piece being moved is trying to takes its own piece 
+            if(currentPiece.getColor() == board[7 - rowItGoesTo][columnItGoesTo].getColor()){
+                return false;
+            }
             
-            }        
-            if(currentPiece.getPiece() == KNIGHT){ //TODO
-                int dx[] = {-2, -1, 1, 2, -2, -1, 1, 2};   
-                int dy[] = {-1, -2, -2, -1, 1, 2, 2, 1};
-                for(int i = 0; i < 8; i++){
-                    //IF THE PLACE THEY WANT TO MOVE TO FOLLOWS ONE OF THE PATTERNS  ABOVE THEY ARE GOOD TO MOVE THERE
-                    if((desired_x_space == currentPiece.getRow() + dx[i]) && (desired_y_space == currentPiece.getColumn() + dy[i])) {
-                        if(board[currentPiece.getRow()+dx[i]][currentPiece.getColumn() + dy[i]].getColor() != currentPiece.getColor()){
-                            if(board[currentPiece.getRow()+dx[i]][currentPiece.getColumn() + dy[i]].getColor() != NONE){
-                                //THIS MEANS THAT THE PIECE CAN ATTACK THE ENEMY PIECE ADD THE ATTACKING CODE HERE
-                                return true;
-                            }
-                            //THIS MEANS THAT THEY ARE JUST MOVING TO THE OTHER SQUARE
-                            else{ 
-                                return  true; 
-                            }
-                            //THIS MEANST THAT THE PLACE THEY WANTED TO MOVE TO WAS OCCUPIED BY A FRIENDLY 
+
+            //Pawns
+            if(currentPiece.getPiece() == PAWN){
+                
+                // If the piece has not moved, it cannot move more than two spots or diagonal 
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                       if(rowItGoesTo > currentPiece.getRow() + 2)
+                        {
                             return false;
-                        }
-                            
+                        }    
+                    }
+                    else if(whitesTurn == false){
+                        if(rowItGoesTo < currentPiece.getRow() - 2)
+                        {
+                            return false;
+                        }  
                     }
                 }
-                    
-            }
-            if(currentPiece.getPiece() ==  KING){ // the king is only allowed to move one square at a time so that is what this is
-                if( (abs(x_spaces) <= 1) && abs(y_spaces <= 1)){
 
+                // If the piece has not moved, it cannot move two spots if there is a piece there
+                if(currentPiece.has_moved == false){
+                    if(whitesTurn){
+                       if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }    
+                    }
+                    else if(whitesTurn == false){
+                        if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
+                        {
+                            return false;
+                        }  
+                    }
                 }
-                //IF THE CURRENT PIECE IS BLACK WE CHECK TO SEE IF IT IS ON THE 8th FILE AND IF IT IS WHITE WE CHECK TO SEE IF IT IS ON THE 1ST FILE
-                //THEN WE CHECK TO MAKE SURE WE ARE STARTING ON THE RIGHT SPOT 
-                // WE THEN CHECK TO MAKE SURE THAT THE PIECE HAS NOT MOVED WHICH KIND OF MAKES EVERYTHING BEFORE USELESS
-                //THEN WE MAKE SURE THE DESIRED SPOT IS TWO SPACES AWAY BECAUSE THAT IS WHAT CASTLING IS 
-                else if ((((currentPiece.getColor() == BLACK && currentPiece.getColumn() == 8) || (currentPiece.getColor() == WHITE && currentPiece.getColumn() == 1)) 
-                && ( currentPiece.getColumn() == 5)) && (currentPiece.has_moved == false) && (abs(x_spaces) == 2) && isCheck(currentPiece,desired_x_space,desired_y_space) == false)
-                {
-                    for(int i = currentPiece.getRow();  i < desired_x_space ? (i < desired_x_space): (i > desired_x_space); i += (x_spaces > 0)  ? 1:-1){
-                        try{
-                            if(board[i][currentPiece.getColumn()].getPiece() != NONE){
-                                throw out_of_range("DUMB");
-                                return false;
-                            }
-                            else{
 
+                // checks if the desired spot is the spot behind the current piece
+                if(whitesTurn){
+                    if(rowItGoesTo < currentPiece.getRow()){
+                    return false;
+                    }
+                }
+                else if (whitesTurn == false){
+                    if(rowItGoesTo > currentPiece.getRow()){
+                    return false;
+                    }
+                }
+                
+                
+
+                // If it is white's turn and there is a piece in front of the pawn, return false 
+                if(whitesTurn && currentPiece.getColumn() == columnItGoesTo ){
+                    if(board[6 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                    return false;
+                    }
+                }
+                //else it is black's turn and if there is a piece in front of a black piece, return false
+                if(whitesTurn == false && currentPiece.getColumn() == columnItGoesTo){
+                    if(board[8 - rowPieceThatsMoving][columnPieceThatsMoving].getPiece() != BLANK){
+                    return false;
+                    }
+                }
+                
+                // If the piece has moved, it cannot move more than two spots 
+                if(currentPiece.has_moved){
+                    if(whitesTurn){
+                       if(rowItGoesTo >= rowPieceThatsMoving + 2)
+                        {
+                            return false;
+                        }    
+                    }
+                    else if(whitesTurn == false){
+                        if(rowItGoesTo <= rowPieceThatsMoving - 2)
+                        {
+                            return false;
+                        }  
+                    }
+                    
+                }
+
+                // allows diagonally takes
+                if(whitesTurn){
+                       if(rowItGoesTo == rowPieceThatsMoving + 1 && columnItGoesTo == columnPieceThatsMoving + 1)
+                        {
+                            return true;
+                        }
+                        else if(rowItGoesTo == rowPieceThatsMoving + 1 && columnItGoesTo == columnPieceThatsMoving -1){
+                            return true;
+                        } 
+                    }
+                    else if(whitesTurn == false){
+                        if(rowItGoesTo == rowPieceThatsMoving - 1 && columnItGoesTo == columnPieceThatsMoving - 1)
+                        {
+                            return true;
+                        }
+                        else if(rowItGoesTo == rowPieceThatsMoving - 1 && columnItGoesTo == columnPieceThatsMoving + 1){
+                            return true;
+                        }  
+                    }
+                
+                // return false if they want to move the pawn left and right
+                if(columnItGoesTo != columnPieceThatsMoving){
+                    return false;
+                }
+
+                return true;
+            }
+
+            //rooks
+            if(currentPiece.getPiece() ==  ROOK){
+
+                //checks for diagonal
+                if(currentPiece.getColumn() - columnItGoesTo != 0 &&
+                   currentPiece.getRow() - rowItGoesTo != 0){
+                    return false;
+                }
+
+                //if rows are changing and columns are not 
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    if(currentPiece.getRow() < rowItGoesTo){
+                        for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
+                    }                    
+                }
+                //if rows are changing and columns are not
+                //other direction
+                if(currentPiece.getColumn() - columnItGoesTo == 0){
+                    if(currentPiece.getRow() > rowItGoesTo){
+                        for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
+                            if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                return false;
+                        }
+                    }
+                }
+                //if columns are changing and rows are not 
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    if(currentPiece.getColumn() < columnItGoesTo){
+                        for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
+                    }   
+                }
+                //other direction
+                if(currentPiece.getRow() - rowItGoesTo == 0){
+                    if(currentPiece.getColumn() > columnItGoesTo){
+                        for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                            if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            //bishops
+            if(currentPiece.getPiece() ==  BISHOP){
+
+                //checks for diagonal
+                if(abs(currentPiece.getColumn() - columnItGoesTo) !=
+                   abs(currentPiece.getRow() - rowItGoesTo)){
+                    return false;
+                }
+
+                //going up right
+                if(columnItGoesTo > currentPiece.getColumn() &&
+                   rowItGoesTo > currentPiece.getRow()){
+                    for(int i = 1; i < columnItGoesTo - currentPiece.getColumn(); i++){
+                        Pieces current = board[7 - currentPiece.getRow() - i][currentPiece.getColumn() + i];
+                        if(current.getPiece() != BLANK){
+                            return false;
+                        }
+                    }
+                }
+
+                //going up left
+                if(columnItGoesTo < currentPiece.getColumn() &&
+                   rowItGoesTo > currentPiece.getRow()){
+                    for(int i = 1; i < abs(columnItGoesTo - currentPiece.getColumn()); i++){
+                        if(board[7 - currentPiece.getRow() - i][currentPiece.getColumn() - i].getPiece() != BLANK){
+                            return false;
+                        }
+                    }
+                }
+
+                //going down right
+                if(columnItGoesTo > currentPiece.getColumn() &&
+                   rowItGoesTo < currentPiece.getRow()){
+                    for(int i = 1; i < columnItGoesTo - currentPiece.getColumn(); i++){
+                        if(board[7 - currentPiece.getRow() + i][currentPiece.getColumn() + i].getPiece() != BLANK){
+                            return false;
+                        }
+                    }                    
+                }
+
+                //going down left
+                if(columnItGoesTo < currentPiece.getColumn() &&
+                   rowItGoesTo < currentPiece.getRow()){
+                    for(int i = 1; abs(i < columnItGoesTo - currentPiece.getColumn()); i++){
+                        if(board[7 - currentPiece.getRow() + i][currentPiece.getColumn() - i].getPiece() != BLANK){
+                            return false;
+                        }
+                    }                    
+                }
+                return true;
+            }
+              
+            //queens
+            if(currentPiece.getPiece() == QUEEN){ //TODO
+                int desired_x_space = columnItGoesTo;
+                int desired_y_space = rowItGoesTo;
+                int x_spaces = currentPiece.getColumn() - columnItGoesTo;
+                int y_spaces = currentPiece.getRow() - rowItGoesTo;
+
+                //checks for diagonal, if not diagional -> go to rook part
+                if(!(currentPiece.getColumn() - columnItGoesTo != 0 &&
+                     currentPiece.getRow() - rowItGoesTo != 0)){
+
+                    //if rows are changing and columns are not 
+                    if(currentPiece.getColumn() - columnItGoesTo == 0){
+                        if(currentPiece.getRow() < rowItGoesTo){
+                            for(int i = currentPiece.getRow() + 1; i < rowItGoesTo; i++)
+                                if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                    return false;
+                            }
+                        }                    
+                    }
+                    //if rows are changing and columns are not
+                    //other direction
+                    if(currentPiece.getColumn() - columnItGoesTo == 0){
+                        if(currentPiece.getRow() > rowItGoesTo){
+                            for(int i = rowItGoesTo; i < currentPiece.getRow(); i++)
+                                if(board[7 - i][columnItGoesTo].getPiece() != BLANK){
+                                    return false;
                             }
                         }
-                        catch (out_of_range){
-                            return false;
+                    }
+                    //if columns are changing and rows are not 
+                    if(currentPiece.getRow() - rowItGoesTo == 0){
+                        if(currentPiece.getColumn() < columnItGoesTo){
+                            for(int i = currentPiece.getColumn() + 1; i < columnItGoesTo; i++)
+                                if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                    return false;
+                            }
+                        }   
+                    }
+                    //other direction
+                    if(currentPiece.getRow() - rowItGoesTo == 0){
+                        if(currentPiece.getColumn() > columnItGoesTo){
+                            for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                                if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
+                                    return false;
+                            }
                         }
                     }
                     return true;
-                }
-                
-            }
-        }
+                }                
 
+                
+                //checks for diagonal
+                if(abs(currentPiece.getColumn() - columnItGoesTo) ==
+                    abs(currentPiece.getRow() - rowItGoesTo)){
+                    
+                    //going up right
+                    if(columnItGoesTo > currentPiece.getColumn() &&
+                       rowItGoesTo > currentPiece.getRow()){
+                        for(int i = 1; i < columnItGoesTo - currentPiece.getColumn(); i++){
+                            Pieces current = board[7 - currentPiece.getRow() - i][currentPiece.getColumn() + i];
+                            if(current.getPiece() != BLANK){
+                                return false;
+                            }
+                        }
+                    }
+                    //going up left
+                    if(columnItGoesTo < currentPiece.getColumn() &&
+                       rowItGoesTo > currentPiece.getRow()){
+                        for(int i = 1; i < abs(columnItGoesTo - currentPiece.getColumn()); i++){
+                            if(board[7 - currentPiece.getRow() - i][currentPiece.getColumn() - i].getPiece() != BLANK){
+                                return false;
+                            }
+                        }
+                    }
+                    //going down right
+                    if(columnItGoesTo > currentPiece.getColumn() &&
+                       rowItGoesTo < currentPiece.getRow()){
+                        for(int i = 1; i < columnItGoesTo - currentPiece.getColumn(); i++){
+                            if(board[7 - currentPiece.getRow() + i][currentPiece.getColumn() + i].getPiece() != BLANK){
+                                return false;
+                            }
+                        }                    
+                    }
+                    //going down left
+                    if(columnItGoesTo < currentPiece.getColumn() &&
+                       rowItGoesTo < currentPiece.getRow()){
+                        for(int i = 1; abs(i < columnItGoesTo - currentPiece.getColumn()); i++){
+                            if(board[7 - currentPiece.getRow() + i][currentPiece.getColumn() - i].getPiece() != BLANK){
+                                return false;
+                            }
+                        }                    
+                    }
+                    return true;
+                }
+                return false;
+            }
+            //knights 
+            if(currentPiece.getPiece() == KNIGHT){ 
+                int dx[] = {-2, -1, 1, 2, -2, -1, 1, 2};   
+                int dy[] = {-1, -2, -2, -1, 1, 2, 2, 1};
+                for(int i = 0; i <= 7; i++){
+                    if(currentPiece.getRow() + dx[i] == rowItGoesTo &&
+                       currentPiece.getColumn() + dy[i] == columnItGoesTo){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            //kings
+            if(currentPiece.getPiece() ==  KING){ 
+                
+                if(abs(currentPiece.getRow() - rowItGoesTo) <= 1 &&
+                   abs(currentPiece.getColumn() - columnItGoesTo) <= 1)
+                   {
+                        return true;
+                   }
+                //castles
+                else if(abs(currentPiece.getRow() - rowItGoesTo) == 0 && // row doesnt change
+                        abs(currentPiece.getColumn() - columnItGoesTo) == 2 && // attempts to move 2
+                        !currentPiece.has_moved) // king hasnt moved
+                        { 
+                        // king attempts to move towards h rook (kingSide)
+                        if(columnItGoesTo > currentPiece.getColumn()){
+                            if(board[7 - currentPiece.getRow()][6].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][5].getPiece() == BLANK &&
+                               !board[7 - currentPiece.getRow()][7].has_moved){
+                                movePiece(7,rowItGoesTo,5,rowItGoesTo);
+                                return true;
+                            }
+                        }
+                        // king attempts to move towards a rook (queenSide)
+                         if(columnItGoesTo < currentPiece.getColumn()){
+                            if(board[7 - currentPiece.getRow()][1].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][2].getPiece() == BLANK &&
+                               board[7 - currentPiece.getRow()][3].getPiece() == BLANK &&
+                               !board[7 - currentPiece.getRow()][0].has_moved){
+                                movePiece(0,rowItGoesTo,3,rowItGoesTo);
+                                return true;
+                            }
+                        }
+                    }
+                return false;
+            }
+        abort();  
+    }
 
     // these two are mostly for testing
     void incMoveCount() {
         moveCount++;
     }
+
     int getMoveCount() {
         return moveCount;
+    }
+
+    void printBoardSpaces(){
+        cout << "-------------------------";
+        cout << endl;
+        for (int i = 0; i < 8; i++) {
+            cout << '|';
+            for (int j = 0; j < 8; j++) {
+                cout << char(j + 97) << abs(i - 7) + 1 << '|';
+            }
+            cout << endl;
+            cout << "-------------------------";
+            cout << endl;
+        }
     }
 };

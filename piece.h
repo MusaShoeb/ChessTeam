@@ -9,6 +9,9 @@ enum color {BLACK, WHITE, NONE}; // COLOR OF PIECE
 class Pieces{
     
     public:
+        Pieces(){
+            
+        }
 
         Pieces(color the_Color, int number_Of_Piece, piece type_Of_Piece , int starting_ROW , int starting_column){
             pieceType = type_Of_Piece;
@@ -16,6 +19,7 @@ class Pieces{
             piece_Number = number_Of_Piece;
             current_row = starting_ROW;
             current_column = starting_column;
+            has_moved = false;
         }
         
         piece getPiece(){
@@ -64,10 +68,13 @@ class Pieces{
         }
         */
     
+    // I dont feel like making gets and sets so has_moved is public - H
+    bool has_moved;
     private:
         piece pieceType;
         color colorType;
         int piece_Number;
         int current_column;
         int current_row;
+        
 };
