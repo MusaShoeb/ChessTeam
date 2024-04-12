@@ -18,11 +18,14 @@ int main() {
 		getInputs(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo, game.isItWhitesTurn());
 
 		// move pieces that the user wants 
+
 		if(game.check_available(rowOfPieceToMove, intColumnOfPieceToMove, rowOfPieceToGoTo, intColumnOfPieceToGoTo)){
 			game.movePiece(intColumnOfPieceToMove, rowOfPieceToMove, intColumnOfPieceToGoTo, rowOfPieceToGoTo);
 			game.incMoveCount();
 			game.changeTurn();
 		}
+
+		game.checkAndDoPromotion();
 			
 	}while(game.doesKingStillExist(WHITE) && game.doesKingStillExist(BLACK));
 
@@ -40,6 +43,10 @@ int main() {
 void getInputs(int& intColumnOfPieceToMove, int& rowOfPieceToMove, int& intColumnOfPieceToGoTo, int& rowOfPieceToGoTo, bool whitesTurn){
 	char columnOfPieceToMove = ' ';
 	char columnOfPieceToGoTo = ' ';
+	intColumnOfPieceToMove = -1;
+	rowOfPieceToMove = -1;
+	intColumnOfPieceToGoTo = -1;
+	rowOfPieceToGoTo = -1;
 	string initalInput = "";
 
 		if(whitesTurn){

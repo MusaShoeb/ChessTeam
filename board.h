@@ -113,6 +113,67 @@ public:
         }
     }
 
+    void checkAndDoPromotion(){
+        for(int i = 0; i <= 7; i++){
+            if(board[0][i].getPiece() == PAWN){
+                string input = "";
+                cout << endl << "Q for queen\nN for knight\nB for bishop\nR for rook";
+                cout << endl << "Promote to: " << endl;
+                cin >> input;
+                while(toupper(input.at(0)) != 'N' &&
+                      toupper(input.at(0)) != 'Q' &&
+                      toupper(input.at(0)) != 'B' &&
+                      toupper(input.at(0)) != 'R'){
+                    cout << endl << "Q for queen\nN for knight\nB for bishop\nR for rook";
+                    cout << endl << "Promote to: " << endl;
+                    cin >> input;
+                }
+                if(toupper(input.at(0)) == 'Q'){
+                    board[0][i].setPiece(QUEEN);
+                }
+                else if(toupper(input.at(0)) == 'N'){
+                    board[0][i].setPiece(KNIGHT);
+                }
+                else if(toupper(input.at(0)) == 'B'){
+                    board[0][i].setPiece(BISHOP);
+                }
+                else if(toupper(input.at(0)) == 'R'){
+                    board[0][i].setPiece(ROOK);
+                }
+                break;
+            }
+        }
+        for(int i = 0; i <= 7; i++){
+            if(board[7][i].getPiece() == PAWN){
+                string input = "";
+                cout << endl << "Q for queen\nN for knight\nB for bishop\nR for rook";
+                cout << endl << "Promote to: " << endl;
+                cin >> input;
+                while(toupper(input.at(0)) != 'N' &&
+                      toupper(input.at(0)) != 'Q' &&
+                      toupper(input.at(0)) != 'B' &&
+                      toupper(input.at(0)) != 'R'){
+                    cout << endl << "Q for queen\nN for knight\nB for bishop\nR for rook";
+                    cout << endl << "Promote to: " << endl;
+                    cin >> input;
+                }
+                if(toupper(input.at(0)) == 'Q'){
+                    board[7][i].setPiece(QUEEN);
+                }
+                else if(toupper(input.at(0)) == 'N'){
+                    board[7][i].setPiece(KNIGHT);
+                }
+                else if(toupper(input.at(0)) == 'B'){
+                    board[7][i].setPiece(BISHOP);
+                }
+                else if(toupper(input.at(0)) == 'R'){
+                    board[7][i].setPiece(ROOK);
+                }
+                break;
+            }
+        }
+    }
+
     void movePiece(int intColumnOfPieceToMove, int rowOfPieceToMove, int intColumnOfPieceToGoTo, int rowOfPieceToGoTo){
         
         /*Created a temp object to deep copy after replacing the piece to go to with the piece that wanted to move*/
@@ -214,7 +275,6 @@ public:
                 return false;
             }
             
-
             //Pawns
             if(currentPiece.getPiece() == PAWN){
                 
@@ -235,6 +295,7 @@ public:
                 }
 
                 // If the piece has not moved, it cannot move two spots if there is a piece there
+                // would this allow it to skip over a peice if it is directly in front of the pawn on it's first turn
                 if(currentPiece.has_moved == false){
                     if(whitesTurn){
                        if(board[7-rowItGoesTo][columnItGoesTo].getPiece() != BLANK)
@@ -362,7 +423,7 @@ public:
                 //other direction
                 if(currentPiece.getRow() - rowItGoesTo == 0){
                     if(currentPiece.getColumn() > columnItGoesTo){
-                        for(int i = columnItGoesTo; i < currentPiece.getColumn(); i++)
+                        for(int i = columnItGoesTo; i < currentPiece.getColumn() - 1; i++)
                             if(board[7 - currentPiece.getRow()][i].getPiece() != BLANK){
                                 return false;
                         }
